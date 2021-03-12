@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "838900233599",
+    "project_id": "nomads-1c901",
+    "storage_bucket": "nomads-1c901.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838900233599:android:fd0c8119f2b0933323564a",
+        "android_client_info": {
+          "package_name": "com.example.nomads"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838900233599-fkhj29rffh12vho8us4epnt1t1ppsv70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGwJpVcfvLQCKoKyb4YiRpUOi7bHSptZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838900233599-fkhj29rffh12vho8us4epnt1t1ppsv70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
