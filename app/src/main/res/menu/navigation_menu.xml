@@ -17,6 +17,10 @@
         android:title="Contact us">
     </item>
     <item
+        android:id="@+id/nav_add_cars_extra"
+        android:title="Add Cars (Temporary for car GPS)">
+    </item>
+    <item
         android:id="@+id/nav_logout"
         android:title="Logout">
     </item>

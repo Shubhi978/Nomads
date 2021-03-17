@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCarsExtraMapActivity">
+
+    <include
+        android:id="@+id/add_car_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        tools:context=".AddCarsExtraMapActivity"></fragment>
+
+    <EditText
+        android:id="@+id/custom_car_id"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/inputs"
+        android:hint="Custom Car ID (and then long press at a location)"
+        android:padding = "10dp">
+    </EditText>
+
+
+</RelativeLayout>

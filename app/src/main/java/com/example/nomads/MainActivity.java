@@ -123,7 +123,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Settings activity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_contact_us:
-                Toast.makeText(this, "Contact us cctivity", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Contact us activity", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_add_cars_extra:
+                Toast.makeText(this, "AddCar activity", Toast.LENGTH_SHORT).show();
+                Intent addCarIntent = new Intent(MainActivity.this, AddCarsExtraMapActivity.class);
+                startActivity(addCarIntent);
                 break;
             case R.id.nav_logout:
                 //Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
