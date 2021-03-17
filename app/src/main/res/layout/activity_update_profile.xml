@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/feed_background"
+tools:context=".UpdateProfileActivity">
+
+    <include
+        android:id="@+id/update_profile_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/update_profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/profile">
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <TextView
+            android:id="@+id/update_profile_fullname_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Full Name:"
+            android:layout_below="@+id/update_profile_image"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_fullname_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Full name"
+            android:layout_below="@+id/update_profile_image"
+            android:layout_toRightOf="@+id/update_profile_fullname_heading"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </EditText>
+
+        <TextView
+            android:id="@+id/update_profile_dob_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth:"
+            android:layout_below="@+id/update_profile_fullname_display"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_dob_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="dob"
+            android:layout_below="@+id/update_profile_fullname_display"
+            android:layout_toRightOf="@+id/update_profile_dob_heading"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </EditText>
+
+        <TextView
+            android:id="@+id/update_profile_aadharNo_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="AadharNo:"
+            android:layout_below="@+id/update_profile_dob_display"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_aadharNo_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="aadhar number"
+            android:layout_below="@+id/update_profile_dob_display"
+            android:layout_toRightOf="@+id/update_profile_aadharNo_heading"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:inputType="number"
+            android:paddingHorizontal="10dp">
+        </EditText>
+
+        <TextView
+            android:id="@+id/update_profile_address_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:layout_below="@+id/update_profile_aadharNo_display"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+
+        <TextView
+            android:id="@+id/update_profile_address_line1_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Line 1:"
+            android:layout_below="@+id/update_profile_address_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_address_line1_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="House no / street"
+            android:layout_below="@+id/update_profile_address_heading"
+            android:layout_toRightOf="@+id/update_profile_address_line1_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </EditText>
+
+        <TextView
+            android:id="@+id/update_profile_address_line2_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Line 2:"
+            android:layout_below="@+id/update_profile_address_line1_display"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_address_line2_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="address line 2"
+            android:layout_below="@+id/update_profile_address_line1_display"
+            android:layout_toRightOf="@+id/update_profile_address_line2_heading"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </EditText>
+
+        <EditText
+            android:id="@+id/update_profile_address_city_display"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_address_line2_display"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:hint="City"
+            android:paddingVertical="2dp"/>
+
+        <EditText
+            android:id="@+id/update_profile_country_display"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_address_line2_display"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:hint="country"
+            android:paddingVertical="2dp" />
+
+        <TextView
+            android:id="@+id/update_profile_address_pincode_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Pincode:"
+            android:layout_below="@+id/update_profile_address_city_display"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_address_pincode_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="pincode"
+            android:layout_below="@+id/update_profile_address_city_display"
+            android:layout_toRightOf="@+id/update_profile_address_pincode_heading"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp"
+            android:inputType="number">
+        </EditText>
+
+        <TextView
+            android:id="@+id/update_profile_contact_no_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Contact:"
+            android:layout_below="@+id/update_profile_address_pincode_heading"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <EditText
+            android:id="@+id/update_profile_contact_no_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="contact no"
+            android:layout_below="@+id/update_profile_address_pincode_heading"
+            android:layout_toRightOf="@+id/update_profile_contact_no_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp"
+            android:inputType="number">
+        </EditText>
+
+        <TextView
+            android:id="@+id/driverslicenceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_contact_no_display"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="20dp"
+            android:text="Driver's Licence Details:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/update_profile_dlno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/driverslicenceTextView"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:hint="Driving Licence Number"
+            android:inputType="textMultiLine"/>
+
+        <EditText
+            android:id="@+id/update_profile_dl_issuer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_dlno"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Issued By"
+            android:inputType="textMultiLine"
+            android:paddingVertical="2dp"/>
+
+        <EditText
+            android:id="@+id/update_profile_dl_issue_date"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_dl_issuer"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Issue Date"
+            android:inputType="date"
+            android:paddingVertical="2dp"/>
+
+        <EditText
+            android:id="@+id/update_profile_dl_valid_till"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_profile_dl_issuer"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Valid till"
+            android:inputType="date"
+            android:paddingVertical="2dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_profile_save_button"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:background="@drawable/button"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:layout_below="@+id/update_profile_dl_valid_till"
+            android:layout_alignRight="@+id/update_profile_contact_no_display"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+    </RelativeLayout>
+</ScrollView>
+
+</RelativeLayout>

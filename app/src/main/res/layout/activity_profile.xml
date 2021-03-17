@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/feed_background"
+tools:context=".ProfileActivity">
+
+    <include
+        android:id="@+id/profile_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/profile_toolbar"
+    android:layout_marginTop="50dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="150sp"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/profile">
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <TextView
+            android:id="@+id/profile_fullname_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Full Name:"
+            android:layout_below="@+id/profile_image"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_fullname_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="full name"
+            android:layout_below="@+id/profile_image"
+            android:layout_toRightOf="@+id/profile_fullname_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_dob_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth:"
+            android:layout_below="@+id/profile_fullname_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_dob_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="DOB"
+            android:layout_below="@+id/profile_fullname_display"
+            android:layout_toRightOf="@+id/profile_dob_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_aadharNo_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Aadhar No.:"
+            android:layout_below="@+id/profile_dob_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_aadharNo_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="aadhar number"
+            android:layout_below="@+id/profile_dob_display"
+            android:layout_toRightOf="@+id/profile_aadharNo_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_address_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:layout_below="@+id/profile_aadharNo_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_address_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="address"
+            android:layout_below="@+id/profile_aadharNo_display"
+            android:layout_toRightOf="@+id/profile_address_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_country_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Country:"
+            android:layout_below="@+id/profile_address_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_country_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="country"
+            android:layout_below="@+id/profile_address_display"
+            android:layout_toRightOf="@+id/profile_country_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_contact_no_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Contact:"
+            android:layout_below="@+id/profile_country_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_contact_no_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="contact no"
+            android:layout_below="@+id/profile_country_display"
+            android:layout_toRightOf="@+id/profile_contact_no_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/driverslicenceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_contact_no_display"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:text="Driver's Licence Details:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/profile_dlno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/driverslicenceTextView"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="7dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:hint="Driving Licence Number"
+            android:inputType="textMultiLine">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_dl_issuer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_dlno"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Issued By"
+            android:inputType="textMultiLine"
+            android:paddingVertical="2dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_dl_issue_date"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_dl_issuer"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Issue Date"
+            android:inputType="date"
+            android:paddingVertical="2dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/profile_dl_valid_till"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_dl_issuer"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/inputs"
+            android:paddingHorizontal="10dp"
+            android:gravity="start|top"
+            android:hint="Valid till"
+            android:inputType="date"
+            android:paddingVertical="2dp" >
+        </TextView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_edit_button"
+            android:text="Edit Profile"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:background="@drawable/button"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:layout_below="@+id/profile_dl_valid_till"
+            android:layout_alignRight="@+id/profile_contact_no_display"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+    </RelativeLayout>
+</ScrollView>
+
+</RelativeLayout>

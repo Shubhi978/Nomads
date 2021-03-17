@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -21,9 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView;
+    private TextView navProfileUsername;
+    private CircleImageView navProfileImage;
     private DrawerLayout drawerLayout;
     private Toolbar mToolbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -50,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
+
+        navProfileImage = (CircleImageView)navView.findViewById(R.id.nav_header_profile_image);
+        navProfileUsername = (TextView)navView.findViewById(R.id.nav_header_username);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -115,15 +124,19 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile activity", Toast.LENGTH_SHORT).show();
-                break;
+                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(profileIntent);
+            break;
             case R.id.nav_home:
                 Toast.makeText(this, "Home activity", Toast.LENGTH_SHORT).show();
+                Intent homeIntent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(homeIntent);
                 break;
             case R.id.nav_settings:
                 Toast.makeText(this, "Settings activity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_contact_us:
-                Toast.makeText(this, "Contact us cctivity", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Contact us activity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
                 //Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
