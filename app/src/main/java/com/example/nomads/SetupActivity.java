@@ -103,8 +103,13 @@ public class SetupActivity extends AppCompatActivity {
             userMap.put("dlIssuedBy", dlIssuedByStr);
             userMap.put("dlIssueDate", dlIssueDateStr);
             userMap.put("dlValidTill", dlValidTillStr);
-            userMap.put("gender", "none");
-            userMap.put("dob", "null");
+            userMap.put("gender", "N/A");
+            userMap.put("dob", "N/A");
+            userMap.put("address", "N/A");
+            userMap.put("addressL1", "N/A");
+            userMap.put("addressL2", "N/A");
+            userMap.put("city", "N/A");
+            userMap.put("pincode", "N/A");
 
             userRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
                 @Override
