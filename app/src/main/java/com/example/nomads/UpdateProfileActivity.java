@@ -197,8 +197,15 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private void sendUserToProfileActivity() {
         Intent profileIntent = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
-        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(profileIntent);
+        finish();
+    }
+
+    private void sendUserToMainActivity() {
+        Intent mainIntent = new Intent(UpdateProfileActivity.this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainIntent);
         finish();
     }
 }

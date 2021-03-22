@@ -35,7 +35,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     Location lastLocation;
     LocationRequest locationRequest;
 
-    /*
+    ///*
     LocationManager locationManager;
     LocationListener locationListener;
 
@@ -46,13 +46,13 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, (android.location.LocationListener) locationListener);
                 }
             }
         }
     }
 
-     */
+     //*/
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
