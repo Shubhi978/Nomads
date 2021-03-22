@@ -201,11 +201,4 @@ public class UpdateProfileActivity extends AppCompatActivity {
         startActivity(profileIntent);
         finish();
     }
-
-    private void sendUserToMainActivity() {
-        Intent mainIntent = new Intent(UpdateProfileActivity.this, MainActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
-        finish();
-    }
 }
