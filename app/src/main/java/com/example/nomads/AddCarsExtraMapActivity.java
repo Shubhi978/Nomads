@@ -153,8 +153,11 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
             carRef.child("Location").child("longitude").setValue(latLng.longitude);
 
             carRef.child("available").setValue("true");
-            carRef.child("Details").child("name").setValue("Model name");
-            carRef.child("Details").child("carNo").setValue("Vehicle Identification Number");
+            carRef.child("Details").child("car_modelName").setValue("Model name");
+            carRef.child("Details").child("car_plateNo").setValue("Vehicle Identification Number");
+            carRef.child("Details").child("car_modelNo").setValue("model no");
+            carRef.child("Details").child("car_mileage").setValue("mileage");
+            carRef.child("Details").child("car_rating").setValue("rating");
             //Other details
         }
 

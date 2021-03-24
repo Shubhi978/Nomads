@@ -24,14 +24,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView fullnameTv, dobTv, aadharNoTv, addressTv, countryTv, contactTv,  dlNoTv, dlIssuedByTv, dlIssueDateTv, dlValidTillTv;
-    AppCompatButton editProfileButton;
-    CircleImageView userProfileImage;
+    private TextView fullnameTv, dobTv, aadharNoTv, addressTv, countryTv, contactTv,  dlNoTv, dlIssuedByTv, dlIssueDateTv, dlValidTillTv;
+    private AppCompatButton editProfileButton;
+    private CircleImageView userProfileImage;
 
     private Toolbar mToolbar;
 
-    FirebaseAuth mAuth;
-    DatabaseReference profileUserRef;
+    private FirebaseAuth mAuth;
+    private DatabaseReference profileUserRef;
     String currentUserID;
 
     @Override
