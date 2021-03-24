@@ -26,6 +26,7 @@
         android:layout_alignLeft="@id/nav_header_profile_image"
         android:layout_marginTop="10dp"
         android:text="Username"
+        android:ems="10"
         android:textAlignment="center"
         android:textColor="@color/cardview_light_background"
         android:textSize="16sp" />

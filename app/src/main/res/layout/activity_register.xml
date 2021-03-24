@@ -7,19 +7,29 @@
     android:background="@drawable/home_page"
     tools:context=".RegisterActivity">
 
+    <TextView
+        android:id="@+id/Heading_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:text="Sign Up to get a Ride now.."
+        android:textAlignment="center"
+        android:textColor="#0000FF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
 
     <EditText
         android:id="@+id/register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/inputs"
         android:drawableLeft="@drawable/email"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@color/colorBlack"
-        android:textColorHint="@color/colorBlack"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -36,8 +46,8 @@
         android:background="@drawable/inputs"
         android:drawableLeft="@drawable/password"
         android:textColor="@color/colorBlack"
-        android:textColorHint="@color/colorBlack"
-        android:hint="Passwrod"
+        android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         android:padding="10dp" />
 
@@ -63,11 +73,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/register_confirm_password"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:padding="15dp"
+        android:ems="10"
         android:text="Create Account"
         android:textColor="@color/white"
         android:textSize="20sp" />

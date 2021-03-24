@@ -7,6 +7,18 @@
     android:background="@drawable/home_page"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:id="@+id/Heading_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:text="To continue, Login to Nomads.."
+        android:textAlignment="center"
+        android:textColor="#0000FF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
 
     <EditText
         android:id="@+id/login_email"
@@ -15,10 +27,10 @@
         android:layout_marginTop="130dp"
         android:background="@drawable/inputs"
         android:padding="8dp"
+        android:ems="10"
         android:drawableLeft="@drawable/email"
         android:layout_marginStart="10dp"
-        android:textColor="@color/colorBlack"
-        android:textColorHint="@color/colorBlack"
+        android:textColor="@color/black"
         android:layout_marginEnd="8dp"
         android:hint="Email"
         android:inputType="textEmailAddress" />
@@ -34,9 +46,8 @@
         android:textColor="@color/colorBlack"
         android:layout_marginEnd="8dp"
         android:drawableLeft="@drawable/password"
-        android:textColorHint="@color/colorBlack"
         android:ems="10"
-        android:hint="Passwrod"
+        android:hint="Password"
         android:inputType="textPassword"
         android:padding="8dp" />
 
@@ -50,6 +61,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:padding="15dp"
+        android:ems="10"
         android:text="Login"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -62,7 +74,8 @@
         android:layout_marginTop="10dp"
         android:text="Need a new Account?"
         android:textAlignment="center"
-        android:textColor="@color/purple_700"
+        android:ems="10"
+        android:textColor="#0000FF"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -74,7 +87,8 @@
         android:layout_marginTop="40dp"
         android:text="Or Login with"
         android:textAlignment="center"
-        android:textColor="@color/purple_500"
+        android:ems="10"
+        android:textColor="#0000FF"
         android:textSize="18sp"
         android:textStyle="bold" />
 

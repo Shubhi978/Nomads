@@ -13,23 +13,22 @@
         layout="@layout/app_bar_layout">
     </include>
 
-    <!--
     <ImageView
         android:id="@+id/car_imageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:layout_below="@+id/profile_toolbar"
-        android:src="@drawable/car" />
-        -->
+        android:layout_below="@+id/car_toolbar"
+        android:src="@drawable/sport_car" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/car_waiting_text_view"
-        android:layout_below="@+id/car_toolbar"
+        android:layout_below="@+id/car_imageView"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:text="Reach the car in 60 minutes"
