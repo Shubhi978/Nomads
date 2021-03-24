@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
@@ -35,6 +34,7 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
     private Toolbar mToolbar;
 
     private GoogleMap mMap;
+
     LocationManager locationManager;
     LocationListener locationListener;
     EditText customCarID;
@@ -91,7 +91,7 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
                     //mMap.clear();
                     LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(userLocation).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
                 }
             }
 
@@ -120,7 +120,7 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
                 //mMap.clear();
                 LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
             }
         }
     }
@@ -136,16 +136,21 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
          */
 
         mMap.addMarker(new MarkerOptions().position(latLng).title("New Car"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
         String carID = customCarID.getText().toString();
         if(TextUtils.isEmpty(carID)){
             Toast.makeText(this, "UNIQUE Custom car id needed!", Toast.LENGTH_SHORT).show();
         }else{
             DatabaseReference carRef = FirebaseDatabase.getInstance().getReference().child("Cars").child(carID);
-
-            GeoFire geoFire = new GeoFire(carRef.child("location"));
-            geoFire.setLocation(carID, new GeoLocation(latLng.latitude , latLng.longitude));
+            /*
+            //GeoFire geoFire = new GeoFire(carRef.child("location"));
+            GeoFire geoFire = new GeoFire(carRef);
+            geoFire.setLocation("location", new GeoLocation(latLng.latitude , latLng.longitude));
+             */
+            //Alternative location in Firebase
+            carRef.child("Location").child("latitude").setValue(latLng.latitude);
+            carRef.child("Location").child("longitude").setValue(latLng.longitude);
 
             carRef.child("available").setValue("true");
             carRef.child("Details").child("name").setValue("Model name");

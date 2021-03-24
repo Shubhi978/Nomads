@@ -26,6 +26,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"></fragment>
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
