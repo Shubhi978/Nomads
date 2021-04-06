@@ -78,7 +78,8 @@ tools:context=".UpdateProfileActivity">
             android:layout_marginLeft="30dp"
             android:background="@drawable/inputs"
             android:paddingVertical="2dp"
-            android:paddingHorizontal="10dp">
+            android:paddingHorizontal="10dp"
+            android:inputType="date">
         </EditText>
 
         <TextView

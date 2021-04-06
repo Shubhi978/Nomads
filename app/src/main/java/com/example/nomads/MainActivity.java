@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Timer;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,8 +46,16 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
-
+    static String currentUserID;
     static CountDownTimer countDownTimer;
+    static Timer rideTimer;
+    static String currentRideCarID = "";
+    static double rideRate = 0.75;   //Rs. per minute
+    static RideTimerRunnable rideTimerRunnable;
+    static Handler timerHandler;
+    static boolean handlerIfRunning = false;
+    static Runnable timerRunnable;
+    static int rideTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //MapFragment ka code
-
     }
 
     @Override
@@ -93,11 +102,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkUserExistence() {
-        final String currentUserID = mAuth.getCurrentUser().getUid();
+        //final String currentUserID = mAuth.getCurrentUser().getUid();
+        currentUserID = mAuth.getCurrentUser().getUid();
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.hasChild(currentUserID)){
+                if(snapshot.exists() && !snapshot.hasChild(currentUserID)){
                     sendUserToSetupActivity();
                 }
             }

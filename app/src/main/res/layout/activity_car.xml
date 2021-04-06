@@ -16,7 +16,7 @@
     <ImageView
         android:id="@+id/car_imageView"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Plate Number :"
         android:textColor="#100303"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_below="@+id/car_waiting_text_view"
         android:layout_marginTop="10dp"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="UP78HJ7596"
         android:textColor="#0B0000"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:layout_below="@+id/car_waiting_text_view"
         android:layout_toRightOf="@+id/car_plateNo_Heading"
         android:layout_marginTop="10dp"
@@ -71,7 +71,7 @@
         android:layout_marginLeft="60dp"
         android:text="Model Number :"
         android:textColor="#100303"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_below="@+id/car_plateNo"/>
 
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:text="AD567HUI9"
         android:textColor="#0B0000"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:layout_below="@+id/car_plateNo"
         android:layout_toRightOf="@+id/car_modelNo_Heading"
         android:layout_marginTop="5dp"
@@ -98,7 +98,7 @@
         android:layout_marginLeft="60dp"
         android:text="Mileage :"
         android:textColor="#100303"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_below="@+id/car_modelNo"/>
 
@@ -107,7 +107,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textColor="#0B0000"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:text="20 km/l"
         android:layout_below="@+id/car_modelNo"
         android:layout_toRightOf="@+id/car_mileage_Heading"
@@ -125,7 +125,7 @@
         android:layout_marginLeft="60dp"
         android:text="Rating :"
         android:textColor="#100303"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_below="@+id/car_mileage"/>
 
@@ -134,7 +134,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textColor="#0B0000"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:text="4.4"
         android:layout_below="@+id/car_mileage"
         android:layout_toRightOf="@+id/car_rating_Heading"
@@ -152,7 +152,7 @@
         android:layout_marginLeft="60dp"
         android:text="Availability :"
         android:textColor="#100303"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_below="@+id/car_rating"/>
 
@@ -161,7 +161,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textColor="#0B0000"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:text="available"
         android:layout_below="@+id/car_rating"
         android:layout_toRightOf="@+id/car_availability_Heading"
@@ -189,11 +189,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/car_available_text_view"
-        android:layout_above="@+id/car_book_button"
-        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/car_unlock_button"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:text="Car Available"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="invisible"></TextView>
 
@@ -203,12 +203,12 @@
         android:id="@+id/car_book_button"
         android:text="Book Now"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:background="@drawable/button"
+        android:layout_below="@+id/car_available_text_view"
+        android:layout_marginTop="20dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginRight="60dp"
-        android:layout_marginBottom="100dp"
         android:padding="8dp">
     </androidx.appcompat.widget.AppCompatButton>
 
@@ -216,13 +216,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/car_cancel_booking_button"
+        android:layout_below="@+id/car_available_text_view"
+        android:layout_marginTop="20dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginRight="60dp"
-        android:layout_marginBottom="100dp"
         android:padding="8dp"
         android:background="@drawable/button"
         android:text="Cancel Booking"
+        android:textSize="14sp"
         android:textColor="@color/white"
         android:visibility="invisible">
     </androidx.appcompat.widget.AppCompatButton>

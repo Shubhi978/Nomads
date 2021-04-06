@@ -24,16 +24,16 @@
         android:id="@+id/register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="150dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/inputs"
         android:drawableLeft="@drawable/email"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@color/colorBlack"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:textColor="@color/colorBlack" />
 
     <EditText
         android:id="@+id/register_password"
@@ -61,8 +61,6 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/inputs"
         android:drawableLeft="@drawable/password"
-        android:textColorHint="@color/colorBlack"
-        android:textColor="@color/colorBlack"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"

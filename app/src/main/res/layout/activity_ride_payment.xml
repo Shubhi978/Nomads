@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RidePaymentActivity">
+
+    <include
+        android:id="@+id/ride_payment_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ride_payment_text_view"
+        android:text="Pay for the ride"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="10dp"></TextView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ride_payment_success_button"
+        android:background="@drawable/button"
+        android:text="Success"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="70dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:padding="10dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ride_payment_failure_button"
+        android:background="@drawable/button"
+        android:text="Failure"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="70dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:padding="10dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+</RelativeLayout>

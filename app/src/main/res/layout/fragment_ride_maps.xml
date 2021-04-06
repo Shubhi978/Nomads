@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RideMapsFragment"
+    android:outlineAmbientShadowColor="@color/teal_700"
+    android:outlineSpotShadowColor="@color/teal_700">
+
+    <fragment
+        android:id="@+id/ride_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ride_map_fragment_closest_parking_button"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:text="Closest Parking spot"
+        android:paddingHorizontal="10dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false">
+    </androidx.appcompat.widget.AppCompatButton>
+</RelativeLayout>

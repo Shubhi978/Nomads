@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RideActivity">
+
+    <include
+        android:id="@+id/ride_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+    <TextView
+        android:id="@+id/ride_heading_car_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ride_toolbar"
+        android:text="Car: Plate no"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/ride_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ride_heading_car_no"
+        android:text="Duration: hh:mm:ss"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/ride_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ride_duration"
+        android:text="Cost: Rs. 0000.00"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:id="@+id/ride_contact_us_button"
+        android:layout_below="@+id/ride_cost"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:text="Contact us"
+        android:paddingHorizontal="10dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:id="@+id/end_ride_button"
+        android:layout_below="@+id/ride_contact_us_button"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:text="Pay and End Ride"
+        android:paddingHorizontal="10dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <fragment
+        android:id="@+id/ride_map"
+        android:name="com.example.nomads.RideMapsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/end_ride_button"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp">
+    </fragment>
+
+</RelativeLayout>

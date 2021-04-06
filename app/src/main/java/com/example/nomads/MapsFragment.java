@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -53,10 +54,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.*;
 
-public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsFragment extends Fragment implements LocationListener {
 
     private GoogleMap mMap;
-    GoogleApiClient googleApiClient;
+    //GoogleApiClient googleApiClient;
     Location lastLocation;
     LocationRequest locationRequest;
     SearchView searchView;
@@ -64,7 +65,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     HashMap<Integer, Marker> hashMapMarker;
     HashMap<String, Marker> carsHashMapMarker;
     LatLng centralLocation;
-    GeoFire geoFire;
+    //GeoFire geoFire;
     private AppCompatButton useCurrentLocationButton;
 
     //LocationManager locationManager;
@@ -108,8 +109,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
             Location lastKnownLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
             LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            //mMap.clear();
-            //mMap.addMarker(new MarkerOptions().position(userLocation).title("Your location"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
             centralLocation = userLocation;
 
@@ -119,26 +118,15 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                     if(carsHashMapMarker.containsValue(marker)){
                         String carKey = "";
                         for(Map.Entry<String, Marker> entry: carsHashMapMarker.entrySet()) {
-                            //if(entry.getValue() == marker) {
                             if(entry.getValue().toString().equals(marker.toString())) {
                                 carKey = entry.getKey();
                                 break;
                             }
                         }
-                        //Toast.makeText(getContext(), "Clicked marker key: "+carKey, Toast.LENGTH_SHORT).show();
                         Intent carInfoIntent = new Intent(getContext(), CarActivity.class);
                         carInfoIntent.putExtra("carId", carKey);
                         startActivity(carInfoIntent);
                     }
-                    /*
-                    if(hashMapMarker.containsKey(0)){
-                        if(marker != hashMapMarker.get(0)){
-                            sendUserToCarActivity();
-                        }
-                    }else
-                        sendUserToCarActivity();
-
-                     */
                     return false;
                 }
             });
@@ -148,39 +136,21 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*
         googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
 
-        //geoFire = new GeoFire(userRef);
-        /*
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-
          */
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        googleApiClient.connect();
+        //googleApiClient.connect();
     }
-
-    /*
-    protected synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
-    }
-
-     */
 
     @Nullable
     @Override
@@ -201,6 +171,8 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+
+        MapsInitializer.initialize(getContext());
 
         hashMapMarker = new HashMap<>();
         carsHashMapMarker = new HashMap<>();
@@ -248,38 +220,40 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         carsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.exists()){
-                        String currentCarID = ds.getKey();
-                        if(ds.child("Location").hasChild("latitude") && ds.child("Location").hasChild("longitude") && ds.hasChild("available")){
-                            double latitude = ds.child("Location").child("latitude").getValue(Double.class);
-                            double longitude = ds.child("Location").child("longitude").getValue(Double.class);
-                            LatLng carLatLng = new LatLng(latitude, longitude);
-                            String available = ds.child("available").getValue().toString();
-                            Marker carMarker;
-                            //Remove last marker
-                            if (carsHashMapMarker.containsKey(currentCarID)) {
-                                Marker rmarker = carsHashMapMarker.get(currentCarID);
-                                rmarker.remove();
-                                carsHashMapMarker.remove(currentCarID);
-                            }
-                            if(available.equals("true")){
-                                carMarker = mMap.addMarker(new MarkerOptions()
-                                        .position(carLatLng)
-                                        .title("car model number")
-                                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.green_car_marker)));
-                                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                if(snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.exists()) {
+                            String currentCarID = ds.getKey();
+                            if (ds.hasChild("Location") && ds.child("Location").hasChild("latitude") && ds.child("Location").hasChild("longitude") && ds.hasChild("available")) {
+                                double latitude = ds.child("Location").child("latitude").getValue(Double.class);
+                                double longitude = ds.child("Location").child("longitude").getValue(Double.class);
+                                LatLng carLatLng = new LatLng(latitude, longitude);
+                                String available = ds.child("available").getValue().toString();
+                                Marker carMarker;
+                                //Remove last marker
+                                if (carsHashMapMarker.containsKey(currentCarID)) {
+                                    Marker rmarker = carsHashMapMarker.get(currentCarID);
+                                    rmarker.remove();
+                                    carsHashMapMarker.remove(currentCarID);
+                                }
+                                if (available.equals("true")) {
+                                    carMarker = mMap.addMarker(new MarkerOptions()
+                                            .position(carLatLng)
+                                            .title("car model number")
+                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.green_car_marker)));
+                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
-                            }else{
-                                carMarker = mMap.addMarker(new MarkerOptions()
-                                        .position(carLatLng)
-                                        .title("car model number")
-                                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.yellow_car_marker)));
-                                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                } else {
+                                    carMarker = mMap.addMarker(new MarkerOptions()
+                                            .position(carLatLng)
+                                            .title("car model number")
+                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.yellow_car_marker)));
+                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                }
+                                carsHashMapMarker.put(currentCarID, carMarker);
                             }
-                            carsHashMapMarker.put(currentCarID, carMarker);
                         }
                     }
                 }
@@ -322,47 +296,12 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         });
     }
 
-    private void sendUserToCarActivity() {
-        Intent carInfoIntent = new Intent(getContext(), CarActivity.class);
-        startActivity(carInfoIntent);
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(locationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, (com.google.android.gms.location.LocationListener) this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     @Override
