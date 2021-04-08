@@ -33,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference profileUserRef;
     String currentUserID;
+    private ValueEventListener profileUserRefValueEventListener;
+    Boolean isProfileUserRefListening = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         profileUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        isProfileUserRefListening = true;
 
         mToolbar = (Toolbar)findViewById(R.id.profile_toolbar);
         setSupportActionBar(mToolbar);
@@ -60,35 +63,36 @@ public class ProfileActivity extends AppCompatActivity {
         dlValidTillTv = (TextView)findViewById(R.id.profile_dl_valid_till);
         editProfileButton = (AppCompatButton) findViewById(R.id.profile_edit_button);
 
-        profileUserRef.addValueEventListener(new ValueEventListener() {
+        profileUserRef.addValueEventListener(profileUserRefValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String fullname = snapshot.child("fullname").getValue().toString();
-                    String dob = snapshot.child("dob").getValue().toString();
-                    String aadharNo = snapshot.child("aadharNo").getValue().toString();
-                    String address = snapshot.child("address").getValue().toString();
-                    String country = snapshot.child("country").getValue().toString();
-                    String contact = snapshot.child("phoneNo").getValue().toString();
-                    String dlNo = snapshot.child("dlNo").getValue().toString();
-                    String dlIssuedBy = snapshot.child("dlIssuedBy").getValue().toString();
-                    String dlIssueDate = snapshot.child("dlIssueDate").getValue().toString();
-                    String dlValidTill = snapshot.child("dlValidTill").getValue().toString();
+                if(isProfileUserRefListening) {
+                    if (snapshot.exists()) {
+                        String fullname = snapshot.child("fullname").getValue().toString();
+                        String dob = snapshot.child("dob").getValue().toString();
+                        String aadharNo = snapshot.child("aadharNo").getValue().toString();
+                        String address = snapshot.child("address").getValue().toString();
+                        String country = snapshot.child("country").getValue().toString();
+                        String contact = snapshot.child("phoneNo").getValue().toString();
+                        String dlNo = snapshot.child("dlNo").getValue().toString();
+                        String dlIssuedBy = snapshot.child("dlIssuedBy").getValue().toString();
+                        String dlIssueDate = snapshot.child("dlIssueDate").getValue().toString();
+                        String dlValidTill = snapshot.child("dlValidTill").getValue().toString();
 
 
-                    fullnameTv.setText(fullname);
-                    dobTv.setText(dob);
-                    aadharNoTv.setText(aadharNo);
-                    addressTv.setText(address);
-                    countryTv.setText(country);
-                    contactTv.setText(contact);
-                    dlNoTv.setText(dlNo);
-                    dlIssuedByTv.setText(dlIssuedBy);
-                    dlIssueDateTv.setText(dlIssueDate);
-                    dlValidTillTv.setText(dlValidTill);
-                }
-                else{
-                    Toast.makeText(ProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                        fullnameTv.setText(fullname);
+                        dobTv.setText(dob);
+                        aadharNoTv.setText(aadharNo);
+                        addressTv.setText(address);
+                        countryTv.setText(country);
+                        contactTv.setText(contact);
+                        dlNoTv.setText(dlNo);
+                        dlIssuedByTv.setText(dlIssuedBy);
+                        dlIssueDateTv.setText(dlIssueDate);
+                        dlValidTillTv.setText(dlValidTill);
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -105,6 +109,31 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(updateProfileIntent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(this, "onResume() of Profile", Toast.LENGTH_SHORT).show();
+        isProfileUserRefListening = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Toast.makeText(this, "onPause() of Profile", Toast.LENGTH_SHORT).show();
+        isProfileUserRefListening = false;
+        if(profileUserRefValueEventListener != null)
+            profileUserRef.removeEventListener(profileUserRefValueEventListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Toast.makeText(this, "onDestroy() of Profile", Toast.LENGTH_SHORT).show();
+        isProfileUserRefListening = false;
+        if(profileUserRefValueEventListener != null)
+            profileUserRef.removeEventListener(profileUserRefValueEventListener);
     }
 }
 

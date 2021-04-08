@@ -4,7 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RideTimerRunnable implements Runnable {
-    public static int time = 0;
+    //public static int time = 0;
     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.currentUserID);
 
     @Override
@@ -14,7 +14,7 @@ public class RideTimerRunnable implements Runnable {
             return;
         else{
             String str;
-            int tmin = ++time;
+            int tmin = ++MainActivity.rideTime;
             int hr = tmin / 60;
             int min = tmin % 60;
 
@@ -34,7 +34,7 @@ public class RideTimerRunnable implements Runnable {
             userRef.child("Car booked").child(MainActivity.currentRideCarID).child("ride_time").setValue(str);
             userRef.child("Car booked").child(MainActivity.currentRideCarID).child("ride_cost").setValue(String.valueOf(cost));
 
-            MainActivity.timerHandler.postDelayed(MainActivity.timerRunnable, 1000);    //Should be 60000 in place of 1000
+            MainActivity.timerHandler.postDelayed(MainActivity.timerRunnable, 5000);    //Should be 60000 in place of 1000
         }
     }
 }

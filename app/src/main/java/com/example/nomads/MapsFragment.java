@@ -102,6 +102,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 return;
             }
             //buildGoogleApiClient();
@@ -196,15 +197,18 @@ public class MapsFragment extends Fragment implements LocationListener {
                         marker.remove();
                         hashMapMarker.remove(0);
                     }
+                    try {
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        Marker searchMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    Marker searchMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
-                    hashMapMarker.put(0, searchMarker);
-                    //Set central location
-                    centralLocation = latLng;
+                        hashMapMarker.put(0, searchMarker);
+                        //Set central location
+                        centralLocation = latLng;
+                    }catch (Exception e){
+                        Toast.makeText(getContext(), "Address not found. Try Again.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return false;
             }
@@ -216,43 +220,46 @@ public class MapsFragment extends Fragment implements LocationListener {
         });
         mapFragment.getMapAsync(callback);
 
-        DatabaseReference carsRef = FirebaseDatabase.getInstance().getReference().child("Cars");
-        carsRef.addValueEventListener(new ValueEventListener() {
+        MainActivity.carsRef = FirebaseDatabase.getInstance().getReference().child("Cars");
+        MainActivity.isCarRefListening = true;
+        MainActivity.carsRef.addValueEventListener(MainActivity.carRefValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.exists()) {
-                            String currentCarID = ds.getKey();
-                            if (ds.hasChild("Location") && ds.child("Location").hasChild("latitude") && ds.child("Location").hasChild("longitude") && ds.hasChild("available")) {
-                                double latitude = ds.child("Location").child("latitude").getValue(Double.class);
-                                double longitude = ds.child("Location").child("longitude").getValue(Double.class);
-                                LatLng carLatLng = new LatLng(latitude, longitude);
-                                String available = ds.child("available").getValue().toString();
-                                Marker carMarker;
-                                //Remove last marker
-                                if (carsHashMapMarker.containsKey(currentCarID)) {
-                                    Marker rmarker = carsHashMapMarker.get(currentCarID);
-                                    rmarker.remove();
-                                    carsHashMapMarker.remove(currentCarID);
-                                }
-                                if (available.equals("true")) {
-                                    carMarker = mMap.addMarker(new MarkerOptions()
-                                            .position(carLatLng)
-                                            .title("car model number")
-                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.green_car_marker)));
-                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                if(MainActivity.isCarRefListening) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (ds.exists()) {
+                                String currentCarID = ds.getKey();
+                                if (ds.hasChild("Location") && ds.child("Location").hasChild("latitude") && ds.child("Location").hasChild("longitude") && ds.hasChild("available")) {
+                                    double latitude = ds.child("Location").child("latitude").getValue(Double.class);
+                                    double longitude = ds.child("Location").child("longitude").getValue(Double.class);
+                                    LatLng carLatLng = new LatLng(latitude, longitude);
+                                    String available = ds.child("available").getValue().toString();
+                                    Marker carMarker;
+                                    //Remove last marker
+                                    if (carsHashMapMarker.containsKey(currentCarID)) {
+                                        Marker rmarker = carsHashMapMarker.get(currentCarID);
+                                        rmarker.remove();
+                                        carsHashMapMarker.remove(currentCarID);
+                                    }
+                                    if (available.equals("true")) {
+                                        carMarker = mMap.addMarker(new MarkerOptions()
+                                                .position(carLatLng)
+                                                .title("car model number")
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.green_car_marker)));
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
-                                } else {
-                                    carMarker = mMap.addMarker(new MarkerOptions()
-                                            .position(carLatLng)
-                                            .title("car model number")
-                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.yellow_car_marker)));
-                                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                    } else {
+                                        carMarker = mMap.addMarker(new MarkerOptions()
+                                                .position(carLatLng)
+                                                .title("car model number")
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.yellow_car_marker)));
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                    }
+                                    carsHashMapMarker.put(currentCarID, carMarker);
                                 }
-                                carsHashMapMarker.put(currentCarID, carMarker);
                             }
                         }
                     }

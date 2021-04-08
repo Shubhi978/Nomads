@@ -46,8 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
+    private ValueEventListener userRefValueEventListener;
+    Boolean isUserRefListening = true;
+
+    static DatabaseReference carsRef = FirebaseDatabase.getInstance().getReference().child("Cars");
+    static ValueEventListener carRefValueEventListener;
+    static Boolean isCarRefListening = true;
     static String currentUserID;
     static CountDownTimer countDownTimer;
+    static Boolean isCountDownTimerRunning = false;
     static Timer rideTimer;
     static String currentRideCarID = "";
     static double rideRate = 0.75;   //Rs. per minute
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean handlerIfRunning = false;
     static Runnable timerRunnable;
     static int rideTime = 0;
+    static String usersCarStatus = "none";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        isUserRefListening = true;
+        isCarRefListening = true;
 
         mToolbar = (Toolbar)findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(mToolbar);
@@ -93,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        isUserRefListening = true;
+        isCarRefListening = true;
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null)
@@ -104,11 +116,20 @@ public class MainActivity extends AppCompatActivity {
     private void checkUserExistence() {
         //final String currentUserID = mAuth.getCurrentUser().getUid();
         currentUserID = mAuth.getCurrentUser().getUid();
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef.addValueEventListener(userRefValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && !snapshot.hasChild(currentUserID)){
-                    sendUserToSetupActivity();
+                if(isUserRefListening) {
+                    if (snapshot.exists()) {
+                        if (!snapshot.hasChild(currentUserID)) {
+                            sendUserToSetupActivity();
+                        } else {
+                            if (snapshot.child(currentUserID).hasChild("fullname")) {
+                                String name = snapshot.child(currentUserID).child("fullname").getValue().toString();
+                                navProfileUsername.setText(name);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -149,11 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
             break;
-            case R.id.nav_home:
-                Toast.makeText(this, "Home activity", Toast.LENGTH_SHORT).show();
-                Intent homeIntent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(homeIntent);
-                break;
             case R.id.nav_settings:
                 Toast.makeText(this, "Settings activity", Toast.LENGTH_SHORT).show();
                 break;
@@ -171,5 +187,42 @@ public class MainActivity extends AppCompatActivity {
                 sendUserToLoginActivity();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isUserRefListening = true;
+        isCarRefListening = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isUserRefListening = false;
+        if(userRefValueEventListener != null)
+            userRef.removeEventListener(userRefValueEventListener);
+
+        /*
+        isCarRefListening = false;
+        if(carRefValueEventListener != null)
+            carsRef.removeEventListener(carRefValueEventListener);
+
+         */
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isUserRefListening = false;
+        if(userRefValueEventListener != null)
+            userRef.removeEventListener(userRefValueEventListener);
+
+        /*
+        isCarRefListening = false;
+        if(carRefValueEventListener != null)
+            carsRef.removeEventListener(carRefValueEventListener);
+
+         */
     }
 }

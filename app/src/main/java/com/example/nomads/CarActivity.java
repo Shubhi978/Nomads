@@ -8,7 +8,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,6 +41,8 @@ public class CarActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference userRef;
     String currentUserID;
+    private ValueEventListener carDetailsValueEventListener, carsValueEventListener, userRefValueEventListener, userCarValueEventListener;
+    boolean isCarDetailsListening = true, isCarsListening = true, isUserRefListening = true, isUserCarListening = true;
 
     //private static final String TAG = CarActivity.class.getSimpleName();
     //private ImageView carImage;
@@ -46,6 +52,12 @@ public class CarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
+
+        //if(MainActivity.usersCarStatus.equals("unlocked"))
+        isCarDetailsListening = true;
+        isCarsListening = true;
+        isUserRefListening = true;
+        isUserCarListening = true;
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -73,50 +85,20 @@ public class CarActivity extends AppCompatActivity {
 
         carRef = FirebaseDatabase.getInstance().getReference().child("Cars").child(carId);
         //Display details
-        carRef.child("Details").addValueEventListener(new ValueEventListener() {
+        carRef.child("Details").addValueEventListener(carDetailsValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String car_plateNo = snapshot.child("car_plateNo").getValue().toString();
-                String car_modelNo = snapshot.child("car_modelNo").getValue().toString();
-                String car_mileage = snapshot.child("car_mileage").getValue().toString();
-                String car_rating = snapshot.child("car_rating").getValue().toString();
+                if (isCarDetailsListening) {
+                    String car_plateNo = snapshot.child("car_plateNo").getValue().toString();
+                    String car_modelNo = snapshot.child("car_modelNo").getValue().toString();
+                    String car_mileage = snapshot.child("car_mileage").getValue().toString();
+                    String car_rating = snapshot.child("car_rating").getValue().toString();
 
-                car_plateNoTv.setText(car_plateNo);
-                car_modelNoTv.setText(car_modelNo);
-                car_mileageTv.setText(car_mileage);
-                car_ratingTv.setText(car_rating);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        carRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                carAvailable = snapshot.child("available").getValue().toString();
-                if(carAvailable.equals("true")){
-                    bookButton.setEnabled(true);
-                    bookButton.setBackgroundResource(R.drawable.button);
-                    //availableTv.setText("Car Unavailable");
-                    availableTv.setVisibility(View.INVISIBLE);
-                    car_availabilityTv.setText("Available");
-                }else if(carAvailable.equals("false")){
-                    bookButton.setEnabled(false);
-                    bookButton.setBackgroundResource(R.drawable.disabled_button);
-                    availableTv.setText("Car Unavailable");
-                    availableTv.setVisibility(View.VISIBLE);
-                    car_availabilityTv.setText("Unavailable");
-                }/*else{
-                    bookButton.setEnabled(false);
-                    bookButton.setBackgroundResource(R.drawable.disabled_button);
-                    //availableTv.setText("Car Unavailable");
-                    availableTv.setVisibility(View.INVISIBLE);
-                    car_availabilityTv.setText("Unavailable");
+                    car_plateNoTv.setText(car_plateNo);
+                    car_modelNoTv.setText(car_modelNo);
+                    car_mileageTv.setText(car_mileage);
+                    car_ratingTv.setText(car_rating);
                 }
-                */
             }
 
             @Override
@@ -124,6 +106,42 @@ public class CarActivity extends AppCompatActivity {
 
             }
         });
+        //groupCreatorAndKeys.put(carRef.child("Details"), carDetailsValueEventListener);
+
+        carRef.addValueEventListener(carsValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(isCarsListening) {
+                    carAvailable = snapshot.child("available").getValue().toString();
+                    if (carAvailable.equals("true")) {
+                        bookButton.setEnabled(true);
+                        bookButton.setBackgroundResource(R.drawable.button);
+                        //availableTv.setText("Car Unavailable");
+                        availableTv.setVisibility(View.INVISIBLE);
+                        car_availabilityTv.setText("Available");
+                    } else if (carAvailable.equals("false")) {
+                        bookButton.setEnabled(false);
+                        bookButton.setBackgroundResource(R.drawable.disabled_button);
+                        availableTv.setText("Car Unavailable");
+                        availableTv.setVisibility(View.VISIBLE);
+                        car_availabilityTv.setText("Unavailable");
+                    }/*else{
+                    bookButton.setEnabled(false);
+                    bookButton.setBackgroundResource(R.drawable.disabled_button);
+                    //availableTv.setText("Car Unavailable");
+                    availableTv.setVisibility(View.INVISIBLE);
+                    car_availabilityTv.setText("Unavailable");
+                    }
+                    */
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //groupCreatorAndKeys.put(carRef, carsValueEventListener);
 
         bookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,35 +149,41 @@ public class CarActivity extends AppCompatActivity {
                 Intent thresholdPaymentIntent = new Intent(CarActivity.this, ThresholdPaymentActivity.class);
                 thresholdPaymentIntent.putExtra("carId", carId);
                 startActivity(thresholdPaymentIntent);
+                finish();
             }
         });
 
+        ///*
         if(isThreshPaymentSuccessfull == 1){
-            Toast.makeText(this, "Returned Threshold payment successfull!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Returned Threshold payment successfull!", Toast.LENGTH_SHORT).show();
             userRef.child("Car booked").child(carId).child("status").setValue("waiting");
             setTimer();
         }
-        userRef.addValueEventListener(new ValueEventListener() {
+
+         //*/
+        userRef.addValueEventListener(userRefValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && snapshot.hasChild("Car booked")){
-                    int bookedFlag = 0;
-                    for(DataSnapshot ds : snapshot.child("Car booked").getChildren()){
-                        if(ds.exists()){
-                            bookedCar = ds.getKey();
-                            bookedFlag = 1;
-                            break;
+                if(isUserRefListening) {
+                    if (snapshot.exists() && snapshot.hasChild("Car booked")) {
+                        int bookedFlag = 0;
+                        for (DataSnapshot ds : snapshot.child("Car booked").getChildren()) {
+                            if (ds.exists()) {
+                                bookedCar = ds.getKey();
+                                bookedFlag = 1;
+                                break;
+                            }
                         }
-                    }
-                    if(bookedFlag == 1){
-                        if(carId.equals(bookedCar))
-                            carBookedByTheCurrentUser();
-                        //else if(carAvailable.equals("true")){
-                        else{
-                            bookButton.setEnabled(false);
-                            bookButton.setBackgroundResource(R.drawable.disabled_button);
-                            availableTv.setText("Can't book more than one car.");
-                            availableTv.setVisibility(View.VISIBLE);
+                        if (bookedFlag == 1) {
+                            if (carId.equals(bookedCar))
+                                carBookedByTheCurrentUser();
+                                //else if(carAvailable.equals("true")){
+                            else {
+                                bookButton.setEnabled(false);
+                                bookButton.setBackgroundResource(R.drawable.disabled_button);
+                                availableTv.setText("Can't book more than one car.");
+                                availableTv.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
@@ -170,11 +194,13 @@ public class CarActivity extends AppCompatActivity {
 
             }
         });
+        //groupCreatorAndKeys.put(userRef, userRefValueEventListener);
+
         unlockCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                //carUnlocked = true;
+                MainActivity.usersCarStatus = "unlocked";
+                ///*
                 userRef.child("Car booked").child(carId).child("status").setValue("unlocked");
                 userRef.child("Car booked").child(carId).child("waiting time").removeValue();
                 MainActivity.countDownTimer.cancel();
@@ -184,12 +210,28 @@ public class CarActivity extends AppCompatActivity {
                 userRef.child("Car booked").child(MainActivity.currentRideCarID).child("ride_time").setValue("00");
                 userRef.child("Car booked").child(MainActivity.currentRideCarID).child("ride_cost").setValue("00");
 
+                ///*
+                MainActivity.rideTimer = new Timer();
+                TimerTask task = new RideTimerTask();
+                //MainActivity.rideTimer.schedule(task, 60000, 60000);
+                //For demo: 1 sec = 1 min
+                MainActivity.rideTimer.schedule(task, 5000, 5000);
+                 //*/
+                /*
+                MainActivity.handlerIfRunning = true;
+                MainActivity.rideTime = 0;
+                MainActivity.timerHandler = new Handler();
+                MainActivity.rideTimerRunnable = new RideTimerRunnable();
+
+                 */
+                /*
                 try {
-                    sendUserToRideActivity();
-                    ///*
+                    //MainActivity.timerHandler.postDelayed(MainActivity.rideTimerRunnable, 5000);    //Should be 60000 in place of 1000
+                    //sendUserToRideActivity();
+
                 }catch(Exception e){
                     Toast.makeText(CarActivity.this, "BadTokenException... Trying again", Toast.LENGTH_SHORT).show();
-                    sendUserToRideActivity();
+                    //sendUserToRideActivity();
                 }
 
                      //*/
@@ -197,29 +239,55 @@ public class CarActivity extends AppCompatActivity {
         });
     }
 
+    ///*
     private void sendUserToRideActivity(){
         Intent rideIntent = new Intent(CarActivity.this, RideActivity.class);
         startActivity(rideIntent);
         finish();
     }
 
+     //*/
+    private void killActivity(){
+        //Toast.makeText(this, "killActivity() called", Toast.LENGTH_SHORT).show();
+        isCarDetailsListening = false;
+        isCarsListening = false;
+        isUserRefListening = false;
+        isUserCarListening = false;
+
+        if(carDetailsValueEventListener != null)
+            carRef.child("Details").removeEventListener(carDetailsValueEventListener);
+        if(carsValueEventListener != null)
+            carRef.removeEventListener(carsValueEventListener);
+        if(userRefValueEventListener != null)
+            userRef.removeEventListener(userRefValueEventListener);
+        if(userCarValueEventListener != null)
+            userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+
+        finish();
+    }
+
     private void carBookedByTheCurrentUser() {
-        userRef.child("Car booked").child(carId).addValueEventListener(new ValueEventListener() {
+        userRef.child("Car booked").child(carId).addValueEventListener(userCarValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    if(snapshot.child("status").exists() && snapshot.child("status").getValue().toString().equals("unlocked")){
-                        Intent rideIntent = new Intent(CarActivity.this, RideActivity.class);
-                        startActivity(rideIntent);
-                    }
-                    if (snapshot.child("waiting time").exists()) {
-                        String str = snapshot.child("waiting time").getValue().toString();
-                        waitingTv.setVisibility(View.VISIBLE);
-                        waitingTv.setText("Reach the car in " + str);
-                        unlockCarButton.setVisibility(View.VISIBLE);
-                        cancelBookingButton.setVisibility(View.VISIBLE);
-                        bookButton.setVisibility(View.INVISIBLE);
-                        availableTv.setVisibility(View.INVISIBLE);
+                if(isUserCarListening) {
+                    if (snapshot.exists()) {
+                        if (snapshot.child("status").exists() && snapshot.child("status").getValue().toString().equals("unlocked")) {
+                            sendUserToRideActivity();
+                            //Toast.makeText(CarActivity.this, "isUserCarListening: "+isUserCarListening, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(CarActivity.this, "Should go to RideActivity", Toast.LENGTH_SHORT).show();
+                            //userRef.child("Car booked").child(carId).removeEventListener(this);
+                            killActivity();
+                        }
+                        if (snapshot.child("waiting time").exists()) {
+                            String str = snapshot.child("waiting time").getValue().toString();
+                            waitingTv.setVisibility(View.VISIBLE);
+                            waitingTv.setText("Reach the car in " + str);
+                            unlockCarButton.setVisibility(View.VISIBLE);
+                            cancelBookingButton.setVisibility(View.VISIBLE);
+                            bookButton.setVisibility(View.INVISIBLE);
+                            availableTv.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
             }
@@ -229,26 +297,30 @@ public class CarActivity extends AppCompatActivity {
 
             }
         });
+        //groupCreatorAndKeys.put(userRef.child("Car booked").child(carId), userCarValueEventListener);
 
         cancelBookingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.countDownTimer.cancel();
+                //MainActivity.countDownTimer.onFinish();
                 carRef.child("available").setValue("true");
                 userRef.child("Car booked").child(carId).removeValue();
                 waitingTv.setVisibility(View.INVISIBLE);
                 unlockCarButton.setVisibility(View.INVISIBLE);
                 cancelBookingButton.setVisibility(View.INVISIBLE);
                 bookButton.setVisibility(View.VISIBLE);
+
+                MainActivity.isCountDownTimerRunning = false;
             }
         });
     }
 
     private void setTimer() {
+        MainActivity.isCountDownTimerRunning = true;
         MainActivity.countDownTimer = new CountDownTimer(60*60* 1000 + 100, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                //Toast.makeText(CarActivity.this, "Timer ticked", Toast.LENGTH_SHORT).show();
                 updateTime((int) millisUntilFinished / 1000);
             }
 
@@ -261,7 +333,7 @@ public class CarActivity extends AppCompatActivity {
                 cancelBookingButton.setVisibility(View.INVISIBLE);
                 bookButton.setVisibility(View.VISIBLE);
 
-
+                MainActivity.isCountDownTimerRunning = false;
             }
         }.start();
     }
@@ -280,4 +352,71 @@ public class CarActivity extends AppCompatActivity {
 
         userRef.child("Car booked").child(carId).child("waiting time").setValue(str);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("RESUME", "onResume() of CARACTIVITY reached!!!!$%");
+        System.out.println("onResume() of CARACTIVITY reached!!!!$%");
+        //Toast.makeText(this, "onResume() reached", Toast.LENGTH_SHORT).show();
+        isCarDetailsListening = true;
+        isCarsListening = true;
+        isUserRefListening = true;
+        isUserCarListening = true;
+
+        /*
+        if(MainActivity.currentRideCarID.equals(carId) && MainActivity.usersCarStatus.equals("booked") && !MainActivity.isCountDownTimerRunning){
+            setTimer();
+        }
+
+         //*/
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("PAUSE", "onPause() of CARACTIVITY reached!!!!$%");
+        //Toast.makeText(this, "onPause() reached", Toast.LENGTH_SHORT).show();
+
+        isCarDetailsListening = false;
+        isCarsListening = false;
+        isUserRefListening = false;
+        isUserCarListening = false;
+
+        if(carDetailsValueEventListener != null)
+            carRef.child("Details").removeEventListener(carDetailsValueEventListener);
+        if(carsValueEventListener != null)
+            carRef.removeEventListener(carsValueEventListener);
+        if(userRefValueEventListener != null)
+            userRef.removeEventListener(userRefValueEventListener);
+        if(userCarValueEventListener != null)
+            userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+        //Log.i("DDDDDDDDDDDDDDDDDDDDDDD", userCarValueEventListener.toString());
+    }
+
+    ///*
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("DESTROY", "onDestroy() of CARACTIVITY reached!!!!$%");
+        //Toast.makeText(this, "onDestroy() reached", Toast.LENGTH_LONG).show();
+
+        ///*
+        isCarDetailsListening = false;
+        isCarsListening = false;
+        isUserRefListening = false;
+        isUserCarListening = false;
+
+        if(carDetailsValueEventListener != null)
+        carRef.child("Details").removeEventListener(carDetailsValueEventListener);
+        if(carsValueEventListener != null)
+        carRef.removeEventListener(carsValueEventListener);
+        if(userRefValueEventListener != null)
+        userRef.removeEventListener(userRefValueEventListener);
+        if(userCarValueEventListener != null)
+        userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+
+         //*/
+    }
+
 }

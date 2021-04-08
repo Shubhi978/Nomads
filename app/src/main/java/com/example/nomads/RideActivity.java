@@ -36,24 +36,22 @@ public class RideActivity extends AppCompatActivity {
 
     String carId = MainActivity.currentRideCarID;
 
+    private ValueEventListener carDetailsValueEventListener, userCarValueEventListener;
+    boolean isCarDetailsListening = true, isUserCarListening = true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride);
 
         /*
-        MainActivity.rideTimer = new Timer();
-        TimerTask task = new RideTimerTask();
-        //MainActivity.rideTimer.schedule(task, 60000, 60000);
-        //For demo: 1 sec = 1 min
-        MainActivity.rideTimer.schedule(task, 1000, 1000);
-
-        //*/
         MainActivity.handlerIfRunning = true;
         MainActivity.rideTime = 0;
         MainActivity.timerHandler = new Handler();
-        //MainActivity.rideTimerRunnable = new RideTimerRunnable();
-        //MainActivity.timerHandler.postDelayed(MainActivity.rideTimerRunnable, 1000);    //Should be 60000 in place of 1000
+        MainActivity.rideTimerRunnable = new RideTimerRunnable();
+        MainActivity.timerHandler.postDelayed(MainActivity.rideTimerRunnable, 1000);    //Should be 60000 in place of 1000
+        /*
         MainActivity.timerRunnable = new Runnable() {
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(MainActivity.currentUserID);
             @Override
@@ -88,6 +86,8 @@ public class RideActivity extends AppCompatActivity {
         };
         MainActivity.timerHandler.post(MainActivity.timerRunnable);
 
+         */
+
         mToolbar = (Toolbar)findViewById(R.id.ride_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Your Ride");
@@ -103,35 +103,18 @@ public class RideActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        isUserCarListening = true;
 
         carRef = FirebaseDatabase.getInstance().getReference().child("Cars").child(carId);
+        isCarDetailsListening = true;
 
-        carRef.child("Details").addValueEventListener(new ValueEventListener() {
+        carRef.child("Details").addValueEventListener(carDetailsValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && snapshot.child("car_plateNo").exists()){
-                    String car_plateNo = snapshot.child("car_plateNo").getValue().toString();
-                    carNoTv.setText("Car No: "+car_plateNo);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        userRef.child("Car booked").child(carId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    if (snapshot.child("ride_time").exists()) {
-                        String str = snapshot.child("ride_time").getValue().toString();
-                        durationTv.setText("Duration: "+str);
-                    }
-                    if (snapshot.child("ride_cost").exists()) {
-                        String str = snapshot.child("ride_cost").getValue().toString();
-                        costTv.setText("Cost: Rs."+str);
+                if(isCarDetailsListening) {
+                    if (snapshot.exists() && snapshot.child("car_plateNo").exists()) {
+                        String car_plateNo = snapshot.child("car_plateNo").getValue().toString();
+                        carNoTv.setText("Car No: " + car_plateNo);
                     }
                 }
             }
@@ -141,24 +124,84 @@ public class RideActivity extends AppCompatActivity {
 
             }
         });
+
+        ///*
+        userRef.child("Car booked").child(carId).addValueEventListener(userCarValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(isUserCarListening) {
+                    if (snapshot.exists()) {
+                        if (snapshot.child("ride_time").exists()) {
+                            String str = snapshot.child("ride_time").getValue().toString();
+                            durationTv.setText("Duration: " + str);
+                        }
+                        if (snapshot.child("ride_cost").exists()) {
+                            String str = snapshot.child("ride_cost").getValue().toString();
+                            costTv.setText("Cost: Rs." + str);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+         //*/
 
         endRideBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+                ///*
                 MainActivity.rideTimer.cancel();
                 MainActivity.rideTimer.purge();
-
                  //*/
+                /*
                 MainActivity.handlerIfRunning = false;
-                //MainActivity.timerHandler.removeCallbacks(MainActivity.rideTimerRunnable);
-                MainActivity.timerHandler.removeCallbacks(MainActivity.timerRunnable);
+                MainActivity.timerHandler.removeCallbacks(MainActivity.rideTimerRunnable);
+                //MainActivity.timerHandler.removeCallbacks(MainActivity.timerRunnable);
                 MainActivity.rideTime = 0;
+                 */
                 //Can add to user history
                 Intent ridePaymentIntent = new Intent(RideActivity.this, RidePaymentActivity.class);
                 ridePaymentIntent.putExtra("cost", costTv.getText().toString());
                 startActivity(ridePaymentIntent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isCarDetailsListening = true;
+        isUserCarListening = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        isCarDetailsListening = false;
+        if(carDetailsValueEventListener != null)
+            carRef.child("Details").removeEventListener(carDetailsValueEventListener);
+
+        isUserCarListening = false;
+        if(userCarValueEventListener != null)
+            userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        isCarDetailsListening = false;
+        if(carDetailsValueEventListener != null)
+            carRef.child("Details").removeEventListener(carDetailsValueEventListener);
+
+        isUserCarListening = false;
+        if(userCarValueEventListener != null)
+            userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
     }
 }

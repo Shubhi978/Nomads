@@ -40,6 +40,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private DatabaseReference updateProfileUserRef;
     private String currentUserID;
 
+    private ValueEventListener updateProfileValueEventListener;
+    Boolean isUpdateProfileUserRefListening = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         updateProfileUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        isUpdateProfileUserRefListening = true;
 
         mToolbar = (Toolbar)findViewById(R.id.update_profile_toolbar);
         setSupportActionBar(mToolbar);
@@ -69,40 +73,41 @@ public class UpdateProfileActivity extends AppCompatActivity {
         dlValidTillTv = (EditText)findViewById(R.id.update_profile_dl_valid_till);
         saveButton = (AppCompatButton) findViewById(R.id.update_profile_save_button);
 
-        updateProfileUserRef.addValueEventListener(new ValueEventListener() {
+        updateProfileUserRef.addValueEventListener(updateProfileValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String fullname = snapshot.child("fullname").getValue().toString();
-                    String dob = snapshot.child("dob").getValue().toString();
-                    String aadharNo = snapshot.child("aadharNo").getValue().toString();
-                    String addressl1 = snapshot.child("addressL1").getValue().toString();
-                    String addressl2 = snapshot.child("addressL2").getValue().toString();
-                    String city = snapshot.child("city").getValue().toString();
-                    String pincode = snapshot.child("pincode").getValue().toString();
-                    String country = snapshot.child("country").getValue().toString();
-                    String contact = snapshot.child("phoneNo").getValue().toString();
-                    String dlNo = snapshot.child("dlNo").getValue().toString();
-                    String dlIssuedBy = snapshot.child("dlIssuedBy").getValue().toString();
-                    String dlIssueDate = snapshot.child("dlIssueDate").getValue().toString();
-                    String dlValidTill = snapshot.child("dlValidTill").getValue().toString();
+                if(isUpdateProfileUserRefListening) {
+                    if (snapshot.exists()) {
+                        String fullname = snapshot.child("fullname").getValue().toString();
+                        String dob = snapshot.child("dob").getValue().toString();
+                        String aadharNo = snapshot.child("aadharNo").getValue().toString();
+                        String addressl1 = snapshot.child("addressL1").getValue().toString();
+                        String addressl2 = snapshot.child("addressL2").getValue().toString();
+                        String city = snapshot.child("city").getValue().toString();
+                        String pincode = snapshot.child("pincode").getValue().toString();
+                        String country = snapshot.child("country").getValue().toString();
+                        String contact = snapshot.child("phoneNo").getValue().toString();
+                        String dlNo = snapshot.child("dlNo").getValue().toString();
+                        String dlIssuedBy = snapshot.child("dlIssuedBy").getValue().toString();
+                        String dlIssueDate = snapshot.child("dlIssueDate").getValue().toString();
+                        String dlValidTill = snapshot.child("dlValidTill").getValue().toString();
 
-                    fullnameTv.setText(fullname);
-                    dobTv.setText(dob);
-                    aadharNoTv.setText(aadharNo);
-                    addressL1Tv.setText(addressl1);
-                    addressL2Tv.setText(addressl2);
-                    cityTv.setText(city);
-                    pincodeTv.setText(pincode);
-                    countryTv.setText(country);
-                    contactTv.setText(contact);
-                    dlNoTv.setText(dlNo);
-                    dlIssuedByTv.setText(dlIssuedBy);
-                    dlIssueDateTv.setText(dlIssueDate);
-                    dlValidTillTv.setText(dlValidTill);
-                }
-                else{
-                    Toast.makeText(UpdateProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                        fullnameTv.setText(fullname);
+                        dobTv.setText(dob);
+                        aadharNoTv.setText(aadharNo);
+                        addressL1Tv.setText(addressl1);
+                        addressL2Tv.setText(addressl2);
+                        cityTv.setText(city);
+                        pincodeTv.setText(pincode);
+                        countryTv.setText(country);
+                        contactTv.setText(contact);
+                        dlNoTv.setText(dlNo);
+                        dlIssuedByTv.setText(dlIssuedBy);
+                        dlIssueDateTv.setText(dlIssueDate);
+                        dlValidTillTv.setText(dlValidTill);
+                    } else {
+                        Toast.makeText(UpdateProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -197,8 +202,31 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private void sendUserToProfileActivity() {
         Intent profileIntent = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
-        //profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(profileIntent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isUpdateProfileUserRefListening = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        isUpdateProfileUserRefListening = false;
+        if(updateProfileValueEventListener != null)
+            updateProfileUserRef.removeEventListener(updateProfileValueEventListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        isUpdateProfileUserRefListening = false;
+        if(updateProfileValueEventListener != null)
+            updateProfileUserRef.removeEventListener(updateProfileValueEventListener);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,6 +28,9 @@ public class ThresholdPaymentActivity extends AppCompatActivity {
 
     String carId;
     DatabaseReference carRef;
+    FirebaseAuth mAuth;
+    DatabaseReference userRef;
+    String currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,10 @@ public class ThresholdPaymentActivity extends AppCompatActivity {
         successButton = (AppCompatButton) findViewById(R.id.threshold_payment_success_button);
         failureButton = (AppCompatButton)findViewById(R.id.threshold_payment_failure_button);
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+
         carId = getIntent().getStringExtra("carId");
 
         textView.setText("Pay the threshold amount to book "+carId);
@@ -55,7 +63,11 @@ public class ThresholdPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
+                            MainActivity.currentRideCarID = carId;
+                            MainActivity.usersCarStatus = "booked";
+                            userRef.child("Car booked").child(carId).child("status").setValue("waiting");
                             Toast.makeText(ThresholdPaymentActivity.this, "Successfully booked!", Toast.LENGTH_SHORT).show();
+                            //finish();
                             sendUserToCarActivityWithSuccess();
                         }else{
                             String message = task.getException().getMessage();
@@ -74,6 +86,7 @@ public class ThresholdPaymentActivity extends AppCompatActivity {
         });
     }
 
+    ///*
     private void sendUserToCarActivityWithSuccess() {
         Intent carBookedIntent = new Intent(ThresholdPaymentActivity.this, CarActivity.class);
         carBookedIntent.putExtra("carId", carId);
@@ -81,4 +94,6 @@ public class ThresholdPaymentActivity extends AppCompatActivity {
         startActivity(carBookedIntent);
         finish();
     }
+
+     //*/
 }
