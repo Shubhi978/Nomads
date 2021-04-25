@@ -47,6 +47,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="Full name"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_image"
             android:layout_toRightOf="@+id/update_profile_fullname_heading"
             android:layout_marginTop="7dp"
@@ -67,11 +68,13 @@ tools:context=".UpdateProfileActivity">
             android:textSize="16sp"
             android:textColor="@color/colorPrimaryDark">
         </TextView>
-        <EditText
+        <TextView
             android:id="@+id/update_profile_dob_display"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="dob"
+            android:textSize="16sp"
+            android:textColor="@color/black"
             android:layout_below="@+id/update_profile_fullname_display"
             android:layout_toRightOf="@+id/update_profile_dob_heading"
             android:layout_marginTop="5dp"
@@ -79,8 +82,8 @@ tools:context=".UpdateProfileActivity">
             android:background="@drawable/inputs"
             android:paddingVertical="2dp"
             android:paddingHorizontal="10dp"
-            android:inputType="date">
-        </EditText>
+            android:clickable="true">
+        </TextView>
 
         <TextView
             android:id="@+id/update_profile_aadharNo_heading"
@@ -98,6 +101,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="aadhar number"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_dob_display"
             android:layout_toRightOf="@+id/update_profile_aadharNo_heading"
             android:layout_marginTop="5dp"
@@ -136,6 +140,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="House no / street"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_address_heading"
             android:layout_toRightOf="@+id/update_profile_address_line1_heading"
             android:layout_marginTop="10dp"
@@ -161,6 +166,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="address line 2"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_address_line1_display"
             android:layout_toRightOf="@+id/update_profile_address_line2_heading"
             android:layout_marginTop="5dp"
@@ -181,6 +187,7 @@ tools:context=".UpdateProfileActivity">
             android:background="@drawable/inputs"
             android:paddingHorizontal="10dp"
             android:hint="City"
+            android:textSize="16sp"
             android:paddingVertical="2dp"/>
 
         <EditText
@@ -195,6 +202,7 @@ tools:context=".UpdateProfileActivity">
             android:background="@drawable/inputs"
             android:paddingHorizontal="10dp"
             android:hint="country"
+            android:textSize="16sp"
             android:paddingVertical="2dp" />
 
         <TextView
@@ -213,6 +221,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="pincode"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_address_city_display"
             android:layout_toRightOf="@+id/update_profile_address_pincode_heading"
             android:layout_marginTop="5dp"
@@ -239,6 +248,7 @@ tools:context=".UpdateProfileActivity">
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="contact no"
+            android:textSize="16sp"
             android:layout_below="@+id/update_profile_address_pincode_heading"
             android:layout_toRightOf="@+id/update_profile_contact_no_heading"
             android:layout_marginTop="10dp"
@@ -272,6 +282,7 @@ tools:context=".UpdateProfileActivity">
             android:background="@drawable/inputs"
             android:paddingVertical="2dp"
             android:hint="Driving Licence Number"
+            android:textSize="16sp"
             android:inputType="textMultiLine"/>
 
         <EditText
@@ -286,10 +297,11 @@ tools:context=".UpdateProfileActivity">
             android:paddingHorizontal="10dp"
             android:gravity="start|top"
             android:hint="Issued By"
+            android:textSize="16sp"
             android:inputType="textMultiLine"
             android:paddingVertical="2dp"/>
 
-        <EditText
+        <TextView
             android:id="@+id/update_profile_dl_issue_date"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
@@ -301,10 +313,12 @@ tools:context=".UpdateProfileActivity">
             android:paddingHorizontal="10dp"
             android:gravity="start|top"
             android:hint="Issue Date"
-            android:inputType="date"
-            android:paddingVertical="2dp"/>
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:paddingVertical="2dp"
+            android:clickable="true"/>
 
-        <EditText
+        <TextView
             android:id="@+id/update_profile_dl_valid_till"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
@@ -318,8 +332,10 @@ tools:context=".UpdateProfileActivity">
             android:paddingHorizontal="10dp"
             android:gravity="start|top"
             android:hint="Valid till"
-            android:inputType="date"
-            android:paddingVertical="2dp" />
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:paddingVertical="2dp"
+            android:clickable="true"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"

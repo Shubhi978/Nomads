@@ -58,7 +58,7 @@ public class RideMapsFragment extends Fragment{
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            Toast.makeText(getContext(), "Map is ready!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Map is ready!", Toast.LENGTH_SHORT).show();
             mMap = googleMap;
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             ///*

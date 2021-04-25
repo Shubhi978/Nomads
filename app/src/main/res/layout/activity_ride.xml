@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_page"
     tools:context=".RideActivity">
 
     <include
@@ -57,7 +58,8 @@
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button"
-        android:text="Contact us"
+        android:text="Emergence call"
+        android:drawableRight="@drawable/ic_baseline_call_24"
         android:paddingHorizontal="10dp"
         android:textColor="@color/white"
         android:textAllCaps="false">

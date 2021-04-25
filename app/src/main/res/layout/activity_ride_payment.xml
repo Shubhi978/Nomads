@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_page"
     tools:context=".RidePaymentActivity">
 
     <include
@@ -16,39 +17,104 @@
         android:layout_height="wrap_content"
         android:id="@+id/ride_payment_text_view"
         android:text="Pay for the ride"
-        android:layout_centerInParent="true"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_below="@+id/ride_payment_toolbar"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
         android:padding="10dp"></TextView>
 
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ride_payment_success_button"
+        android:id="@+id/ride_payment_finish_bttn"
         android:background="@drawable/button"
-        android:text="Success"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="70dp"
-        android:textSize="18sp"
+        android:text="Finish"
         android:textColor="@color/white"
-        android:padding="10dp">
+        android:layout_below="@+id/ride_payment_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="10dp"
+        android:visibility="invisible">
     </androidx.appcompat.widget.AppCompatButton>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ride_payment_failure_button"
-        android:background="@drawable/button"
-        android:text="Failure"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="70dp"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:padding="10dp">
-    </androidx.appcompat.widget.AppCompatButton>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ride_payment_text_view"
+        android:visibility="visible"
+        android:id="@+id/ride_payment_container">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ride_payment_razorpay_button"
+            android:background="@drawable/button"
+            android:text="Pay with Razorpay"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:paddingHorizontal="15dp"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ride_payment_upi_button"
+            android:background="@drawable/button"
+            android:text="Pay with UPI"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:paddingHorizontal="15dp"
+            android:layout_below="@+id/ride_payment_razorpay_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ride_payment_textview2"
+            android:text="------  Demo Payment  ------"
+            android:layout_below="@+id/ride_payment_upi_button"
+            android:layout_marginTop="70dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:padding="10dp"></TextView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ride_payment_success_button"
+            android:background="@drawable/button"
+            android:text="Success"
+            android:layout_below="@+id/ride_payment_textview2"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:padding="10dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ride_payment_failure_button"
+            android:background="@drawable/button"
+            android:text="Failure"
+            android:layout_below="@+id/ride_payment_textview2"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:padding="10dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+    </RelativeLayout>
 
 </RelativeLayout>

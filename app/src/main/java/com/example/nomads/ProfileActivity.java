@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView fullnameTv, dobTv, aadharNoTv, addressTv, countryTv, contactTv,  dlNoTv, dlIssuedByTv, dlIssueDateTv, dlValidTillTv;
+    private TextView fullnameTv, dobTv, aadharNoTv, addressTv, countryTv, contactTv, emailTv,  dlNoTv, dlIssuedByTv, dlIssueDateTv, dlValidTillTv;
     private AppCompatButton editProfileButton;
     private CircleImageView userProfileImage;
 
@@ -57,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
         addressTv = (TextView)findViewById(R.id.profile_address_display);
         countryTv = (TextView)findViewById(R.id.profile_country_display);
         contactTv = (TextView)findViewById(R.id.profile_contact_no_display);
+        emailTv = (TextView)findViewById(R.id.profile_email_display);
         dlNoTv = (TextView)findViewById(R.id.profile_dlno);
         dlIssuedByTv = (TextView)findViewById(R.id.profile_dl_issuer);
         dlIssueDateTv = (TextView)findViewById(R.id.profile_dl_issue_date);
@@ -74,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
                         String address = snapshot.child("address").getValue().toString();
                         String country = snapshot.child("country").getValue().toString();
                         String contact = snapshot.child("phoneNo").getValue().toString();
+                        String email = snapshot.child("email").getValue().toString();
                         String dlNo = snapshot.child("dlNo").getValue().toString();
                         String dlIssuedBy = snapshot.child("dlIssuedBy").getValue().toString();
                         String dlIssueDate = snapshot.child("dlIssueDate").getValue().toString();
@@ -86,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
                         addressTv.setText(address);
                         countryTv.setText(country);
                         contactTv.setText(contact);
+                        emailTv.setText(email);
                         dlNoTv.setText(dlNo);
                         dlIssuedByTv.setText(dlIssuedBy);
                         dlIssueDateTv.setText(dlIssueDate);

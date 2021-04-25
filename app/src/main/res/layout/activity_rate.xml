@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,74 +9,77 @@
     tools:context=".RateActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/rate_toolbar"
         layout="@layout/app_bar_layout">
     </include>
 
-<TextView
-    android:id="@+id/rateText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="170dp"
-    android:layout_marginEnd="16dp"
-    android:padding="10dp"
-    android:text="THANKS FOR RIDING UBER"
-    android:textSize="24sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rate_heading"
+        android:text="Thank you for Riding with us!\n\nDo Rate your Ride  :)"
+        android:textSize="23sp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:layout_below="@+id/rate_toolbar"
+        android:layout_marginTop="40dp">
+    </TextView>
 
-<me.zhanghai.android.materialratingbar.MaterialRatingBar
-    android:id="@+id/ratingBar"
-    android:rating="0"
-    app:mrb_progressTint="@color/cardview_dark_background"
-    app:mrb_secondaryProgressTint="@color/cardview_dark_background"
-    style="@style/Widget.MaterialRatingBar.RatingBar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/rateText" />
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rate_rating_bar"
+        android:layout_below="@+id/rate_heading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:numStars="5"
+        android:stepSize="1"
+        android:progressTint="#FFC107"
+        android:rating="0"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:isIndicator="false">
+    </RatingBar>
 
-<com.rengwuxian.materialedittext.MaterialEditText
-    android:id="@+id/etComment"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginEnd="8dp"
-    android:hint="Comments"
-    android:inputType="textMultiLine"
-    android:maxLines="8"
-    android:textColor="@color/colorPrimary"
-    android:textColorHint="@color/colorPrimary"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-    app:met_baseColor="@color/colorPrimary"
-    app:met_floatingLabel="highlight"
-    app:met_primaryColor="@color/colorPrimary"
-    app:met_singleLineEllipsis="false" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/rate_feedback_edittext"
+        android:layout_below="@+id/rate_rating_bar"
+        android:hint="Your Feedback is valuable to us... (Optional)"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/inputs"
+        android:layout_marginTop="40dp"
+        android:elegantTextHeight="true"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textSize="18sp">
+    </EditText>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:id="@+id/rate_skip_button"
         android:background="@drawable/button"
-        android:padding="15dp"
-        android:text="SUBMIT"
-        app:layout_constraintTop_toBottomOf="@+id/etComment"
+        android:text="Skip"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="20sp" />
+        android:layout_below="@+id/rate_feedback_edittext"
+        android:layout_marginTop="30dp"
+        android:layout_alignLeft="@+id/rate_feedback_edittext"
+        android:layout_marginLeft="20dp">
+    </androidx.appcompat.widget.AppCompatButton>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/rate_submit_button"
+        android:background="@drawable/button"
+        android:text="Submit"
+        android:textColor="@color/white"
+        android:layout_below="@+id/rate_feedback_edittext"
+        android:layout_marginTop="30dp"
+        android:layout_alignRight="@+id/rate_feedback_edittext"
+        android:layout_marginRight="20dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+</RelativeLayout>

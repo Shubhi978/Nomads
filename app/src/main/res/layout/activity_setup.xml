@@ -127,7 +127,7 @@
         android:inputType="textMultiLine"
         android:padding="10dp" />
 
-    <EditText
+    <TextView
         android:id="@+id/setup_dl_issue_date"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
@@ -140,10 +140,11 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="Issue Date"
-        android:inputType="date"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:clickable="true"/>
 
-    <EditText
+    <TextView
         android:id="@+id/setup_dl_valid_till"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
@@ -158,8 +159,9 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="Valid till"
-        android:inputType="date"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:clickable="true"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/setup_information_button"

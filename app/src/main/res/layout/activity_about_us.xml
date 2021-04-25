@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_page"
+    tools:context=".AboutUsActivity">
+
+    <include
+        android:id="@+id/about_us_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/about_us_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/about_us_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"
+                android:text="About Us"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="30sp"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/about_us_text"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_heading"
+                android:layout_marginLeft="20dp"
+                android:padding="10dp"
+                android:text="This application is made as a semester mini-project for the course Software Engineering, by the group 64. It is meant to automate the process of booking cabs for everyday commute, and can be used in a closed setting, a campus for instance, or can be made to cover a larger area like an entire city or state. The users can book available cars nearby at anytime, and drive them to their destination as their own.
+                \n\nDevelopers:
+                \nShubhi Agrawal\t\t\t\t\t\t\tIIT2019163
+                \nRishika Agarwal\t\t\t\t\t\t\tIIT2019171
+                \nJyotsana Srivastava\t\t\t\tIIT2019174
+                \nSnehalreet Kaur\t\t\t\t\t\t\tIIT2019175"
+                android:textColor="@color/black"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connect with us at:"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:padding="10dp"
+                android:layout_marginTop="5dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/about_us_email_1"
+                android:drawableLeft="@drawable/ic_baseline_alternate_email_24"
+                android:text="  iit2019175@iiita.ac.in"
+                android:textSize="17sp"
+                android:textColor="#7FCCFF"
+                android:paddingHorizontal="10dp"
+                android:layout_marginLeft="20dp"
+                android:paddingVertical="3dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emergency Contact:"
+                android:textColor="#7FCCFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:padding="10dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/about_us_phone_1"
+                android:drawableLeft="@drawable/ic_baseline_phone_android_24"
+                android:text="  8303064565"
+                android:textSize="17sp"
+                android:textColor="#7FCCFF"
+                android:paddingHorizontal="10dp"
+                android:layout_marginLeft="20dp"
+                android:paddingVertical="3dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/about_us_phone_2"
+                android:drawableLeft="@drawable/ic_baseline_phone_android_24"
+                android:text="  7985923391"
+                android:textSize="17sp"
+                android:textColor="#7FCCFF"
+                android:paddingHorizontal="10dp"
+                android:layout_marginLeft="20dp"
+                android:paddingVertical="3dp">
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

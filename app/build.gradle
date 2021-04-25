@@ -3,6 +3,13 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+repositories {
+    mavenCentral()
+    flatDir{
+        dirs 'libs'
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -44,13 +51,14 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    //implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     //api 'com.theartofdev.edmodo:android-image-cropper:2.8'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
+    //implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
     implementation 'com.firebase:geofire-android:3.1.0'
     //implementation 'com.facebook.android:facebook-login:[8,1)'
+    implementation 'com.razorpay:checkout:1.6.6'
 }

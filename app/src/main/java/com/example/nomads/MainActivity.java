@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     static Timer rideTimer;
     static String currentRideCarID = "";
     static double rideRate = 0.75;   //Rs. per minute
+    static double thresholdAmt = 2.0;   //in Rs.
     static RideTimerRunnable rideTimerRunnable;
     static Handler timerHandler;
     static boolean handlerIfRunning = false;
@@ -166,15 +167,15 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()){
 
             case R.id.nav_profile:
-                Toast.makeText(this, "Profile activity", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Your profile", Toast.LENGTH_SHORT).show();
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
             break;
-            case R.id.nav_settings:
-                Toast.makeText(this, "Settings activity", Toast.LENGTH_SHORT).show();
-                break;
+            //Can add a "Driver's Licence" activity to upload licence for authentication
             case R.id.nav_contact_us:
-                Toast.makeText(this, "Contact us activity", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Contact us", Toast.LENGTH_SHORT).show();
+                Intent contactUsIntent = new Intent(MainActivity.this, AboutUsActivity.class);
+                startActivity(contactUsIntent);
                 break;
             case R.id.nav_add_cars_extra:
                 Toast.makeText(this, "AddCar activity", Toast.LENGTH_SHORT).show();

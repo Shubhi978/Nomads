@@ -16,6 +16,7 @@
         android:layout_height="match_parent"
         />
 
+    <!--
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ride_map_fragment_closest_parking_button"
         android:layout_width="wrap_content"
@@ -28,4 +29,5 @@
         android:textColor="@color/white"
         android:textAllCaps="false">
     </androidx.appcompat.widget.AppCompatButton>
+    !-->
 </RelativeLayout>

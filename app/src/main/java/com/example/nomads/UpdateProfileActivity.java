@@ -5,11 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,15 +27,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UpdateProfileActivity extends AppCompatActivity {
+public class UpdateProfileActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private Toolbar mToolbar;
 
-    private EditText fullnameTv, dobTv, aadharNoTv, addressL1Tv, addressL2Tv, cityTv, pincodeTv, countryTv, contactTv, dlNoTv, dlIssuedByTv, dlIssueDateTv, dlValidTillTv;
+    private EditText fullnameTv, aadharNoTv, addressL1Tv, addressL2Tv, cityTv, pincodeTv, countryTv, contactTv, dlNoTv, dlIssuedByTv;
+    private TextView dobTv, dlIssueDateTv, dlValidTillTv;
     private AppCompatButton saveButton;
     private CircleImageView userProfileImage;
 
@@ -42,6 +48,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private ValueEventListener updateProfileValueEventListener;
     Boolean isUpdateProfileUserRefListening = true;
+
+    String editingDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +67,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fullnameTv = (EditText)findViewById(R.id.update_profile_fullname_display);
-        dobTv = (EditText)findViewById(R.id.update_profile_dob_display);
+        dobTv = (TextView) findViewById(R.id.update_profile_dob_display);
         aadharNoTv = (EditText)findViewById(R.id.update_profile_aadharNo_display);
         addressL1Tv = (EditText)findViewById(R.id.update_profile_address_line1_display);
         addressL2Tv = (EditText)findViewById(R.id.update_profile_address_line2_display);
@@ -69,8 +77,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         contactTv = (EditText)findViewById(R.id.update_profile_contact_no_display);
         dlNoTv = (EditText)findViewById(R.id.update_profile_dlno);
         dlIssuedByTv = (EditText)findViewById(R.id.update_profile_dl_issuer);
-        dlIssueDateTv = (EditText)findViewById(R.id.update_profile_dl_issue_date);
-        dlValidTillTv = (EditText)findViewById(R.id.update_profile_dl_valid_till);
+        dlIssueDateTv = (TextView)findViewById(R.id.update_profile_dl_issue_date);
+        dlValidTillTv = (TextView) findViewById(R.id.update_profile_dl_valid_till);
         saveButton = (AppCompatButton) findViewById(R.id.update_profile_save_button);
 
         updateProfileUserRef.addValueEventListener(updateProfileValueEventListener = new ValueEventListener() {
@@ -114,6 +122,33 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        dobTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editingDate = "dob";
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
+        dlIssueDateTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editingDate = "issued_on";
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
+        dlValidTillTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editingDate = "valid_till";
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
             }
         });
 
@@ -166,6 +201,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Issue date field empty", Toast.LENGTH_SHORT).show();
         else if(TextUtils.isEmpty(dlValidTill))
             Toast.makeText(this, "validity date field empty", Toast.LENGTH_SHORT).show();
+        else if(contact.length() != 10)
+            Toast.makeText(this, "Enter a valid Phone number", Toast.LENGTH_SHORT).show();
+        else if(aadharNo.length() != 12)
+            Toast.makeText(this, "Enter a valid Aadhar number", Toast.LENGTH_SHORT).show();
+        else if(pincode.length() != 6)
+            Toast.makeText(this, "Enter a valid Pincode", Toast.LENGTH_SHORT).show();
         else{
             HashMap userMap = new HashMap();
             userMap.put("fullname", fullname);
@@ -228,5 +269,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
         isUpdateProfileUserRefListening = false;
         if(updateProfileValueEventListener != null)
             updateProfileUserRef.removeEventListener(updateProfileValueEventListener);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        String date = DateFormat.getDateInstance(DateFormat.SHORT).format(cal.getTime());
+
+        if(editingDate.equals("issued_on"))
+            dlIssueDateTv.setText(date);
+        else if(editingDate.equals("valid_till"))
+            dlValidTillTv.setText(date);
+        else if(editingDate.equals("dob"))
+            dobTv.setText(date);
+        else
+            Toast.makeText(this, "Problem with \"editingDate\" string", Toast.LENGTH_SHORT).show();
     }
 }

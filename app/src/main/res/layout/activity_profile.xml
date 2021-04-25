@@ -164,7 +164,7 @@ tools:context=".ProfileActivity">
             android:id="@+id/profile_contact_no_heading"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Contact:"
+            android:text="Contact No.:"
             android:layout_below="@+id/profile_country_display"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
@@ -186,10 +186,35 @@ tools:context=".ProfileActivity">
         </TextView>
 
         <TextView
+            android:id="@+id/profile_email_heading"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:layout_below="@+id/profile_contact_no_display"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark">
+        </TextView>
+        <TextView
+            android:id="@+id/profile_email_display"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="email"
+            android:layout_below="@+id/profile_contact_no_display"
+            android:layout_toRightOf="@+id/profile_email_heading"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/inputs"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="10dp">
+        </TextView>
+
+        <TextView
             android:id="@+id/driverslicenceTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_contact_no_display"
+            android:layout_below="@+id/profile_email_display"
             android:layout_marginTop="20dp"
             android:paddingLeft="20dp"
             android:text="Driver's Licence Details:"

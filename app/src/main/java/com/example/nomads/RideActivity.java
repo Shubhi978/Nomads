@@ -4,12 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +45,8 @@ public class RideActivity extends AppCompatActivity {
     private ValueEventListener carDetailsValueEventListener, userCarValueEventListener;
     boolean isCarDetailsListening = true, isUserCarListening = true;
 
+    private static final int REQUEST_CALL = 1;
+    String emergencyNo = "7985923391";      //7985923391  9451179809
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +178,35 @@ public class RideActivity extends AppCompatActivity {
                 startActivity(ridePaymentIntent);
             }
         });
+
+        contactUsBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall();
+            }
+        });
+    }
+
+    private void makePhoneCall() {
+        if (ContextCompat.checkSelfPermission(RideActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(RideActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+        } else {
+            String dial = "tel:" + emergencyNo;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CALL) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                makePhoneCall();
+            } else {
+                Toast.makeText(this, "Permission needed to make the call.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

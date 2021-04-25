@@ -157,7 +157,8 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
             carRef.child("Details").child("car_plateNo").setValue("Vehicle Identification Number");
             carRef.child("Details").child("car_modelNo").setValue("model no");
             carRef.child("Details").child("car_mileage").setValue("mileage");
-            carRef.child("Details").child("car_rating").setValue("rating");
+            carRef.child("Details").child("car_rating").setValue("0.0");
+            carRef.child("Details").child("car_ratingCount").setValue("0");
             //Other details
         }
 

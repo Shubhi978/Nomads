@@ -6,10 +6,6 @@
         android:title="Profile">
     </item>
     <item
-        android:id="@+id/nav_settings"
-        android:title="Settings">
-    </item>
-    <item
         android:id="@+id/nav_contact_us"
         android:title="Contact us">
     </item>
