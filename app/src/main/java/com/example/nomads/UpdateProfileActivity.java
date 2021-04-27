@@ -11,6 +11,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -64,7 +65,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements DatePick
         mToolbar = (Toolbar)findViewById(R.id.update_profile_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Update Profile");
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fullnameTv = (EditText)findViewById(R.id.update_profile_fullname_display);
         dobTv = (TextView) findViewById(R.id.update_profile_dob_display);
@@ -159,6 +162,26 @@ public class UpdateProfileActivity extends AppCompatActivity implements DatePick
             }
         });
     }
+
+    ///*
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+     */
 
     private void validateAccountInfo() {
         String fullname = fullnameTv.getText().toString();

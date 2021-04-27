@@ -8,15 +8,26 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,8 +35,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class RideActivity extends AppCompatActivity {
 
@@ -33,6 +52,7 @@ public class RideActivity extends AppCompatActivity {
 
     TextView carNoTv, durationTv, costTv;
     AppCompatButton contactUsBttn, endRideBttn;
+    Button dialogCancelBttn, dialogEmergencyEndBttn;
 
     DatabaseReference carRef;
 
@@ -47,6 +67,24 @@ public class RideActivity extends AppCompatActivity {
 
     private static final int REQUEST_CALL = 1;
     String emergencyNo = "7985923391";      //7985923391  9451179809
+    String emergencyRecipientEmail = "jyotsana.srivastava99@gmail.com,iit2019171@iiita.ac.in,iit2019163@iiita.ac.in,iit2019175@iiita.ac.in";
+    //String emergencyRecipientEmail = "jyotsana.srivastava99@gmail.com";
+    String emergencySenderEmail = "iit2019174@iiita.ac.in";
+    String emergencySenderPassword = "sharedPassword";
+
+    Dialog endConfirmationDialog;
+
+    static DatabaseReference parkingRef;
+    static Location userLocation;
+    static String parkingFoundId = "";
+    static int searchRadius = 1;
+    static boolean isParkingFound = false;
+
+    static GeoQueryEventListener geoQueryEventListener;
+    static boolean isGeoQueryListening = true;
+
+    static ValueEventListener parkingRefValueEventListener;
+    static boolean isParkingRefListening = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,20 +200,9 @@ public class RideActivity extends AppCompatActivity {
         endRideBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ///*
-                MainActivity.rideTimer.cancel();
-                MainActivity.rideTimer.purge();
-                 //*/
-                /*
-                MainActivity.handlerIfRunning = false;
-                MainActivity.timerHandler.removeCallbacks(MainActivity.rideTimerRunnable);
-                //MainActivity.timerHandler.removeCallbacks(MainActivity.timerRunnable);
-                MainActivity.rideTime = 0;
-                 */
-                //Can add to user history
-                Intent ridePaymentIntent = new Intent(RideActivity.this, RidePaymentActivity.class);
-                ridePaymentIntent.putExtra("cost", costTv.getText().toString());
-                startActivity(ridePaymentIntent);
+
+                checkIfParkingSafely();
+                //endTheRide();
             }
         });
 
@@ -185,6 +212,160 @@ public class RideActivity extends AppCompatActivity {
                 makePhoneCall();
             }
         });
+
+        ///*
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+         //*/
+    }
+
+    private void checkIfParkingSafely() {
+        searchRadius = 1;
+        isParkingFound = false;
+        getClosestParking();
+    }
+
+    private void getClosestParking() {
+        parkingRef = FirebaseDatabase.getInstance().getReference().child("ParkingLots");
+
+        GeoFire geoFire = new GeoFire(RideActivity.parkingRef);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(userLocation.getLatitude(), userLocation.getLongitude()), searchRadius);
+
+        geoQuery.removeAllListeners();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                if(!isParkingFound){
+                    isParkingFound = true;
+                    RideActivity.parkingFoundId = key;
+
+                    Location parkingLocation = new Location("");
+                    parkingLocation.setLatitude(location.latitude);
+                    parkingLocation.setLongitude(location.longitude);
+
+                    double distance = userLocation.distanceTo(parkingLocation);
+                    //Toast.makeText(RideActivity.this, "distance found: "+distance, Toast.LENGTH_SHORT).show();
+
+                    //if(distance < 1){
+                        endTheRide();
+                    //}else{
+                      //  displayConfirmationDialog();
+                    //}
+
+                }
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                if(!isParkingFound){
+                    //Toast.makeText(RideActivity.this, "Parking lot not found in 1 query!", Toast.LENGTH_SHORT).show();
+
+                    displayConfirmationDialog();
+                }
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void displayConfirmationDialog() {
+        endConfirmationDialog = new Dialog(RideActivity.this);
+        endConfirmationDialog.setContentView(R.layout.end_ride_dialog);
+        endConfirmationDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.end_ride_dialog_background));
+        endConfirmationDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        endConfirmationDialog.setCancelable(false);
+        endConfirmationDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+
+        dialogCancelBttn = (Button)endConfirmationDialog.findViewById(R.id.dialog_cancel_button);
+        dialogEmergencyEndBttn = (Button)endConfirmationDialog.findViewById(R.id.dialog_emergency_end_button);
+
+        dialogCancelBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endConfirmationDialog.dismiss();
+            }
+        });
+
+        dialogEmergencyEndBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyTheAdminAboutEmergencyEnd();
+                endConfirmationDialog.dismiss();
+                endTheRide();
+            }
+        });
+
+        endConfirmationDialog.show();
+    }
+
+    private void notifyTheAdminAboutEmergencyEnd() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        String currentDateandTime = sdf.format(new Date());
+
+        Random rand = new Random();
+        int rno = rand.nextInt(100)+1;
+        String subject = "Nomads ## EMERGENCY END #" + rno + " ## - Unsafe parking by user";
+        String body = "Time: " + currentDateandTime +
+                "\n\nUser: " + MainActivity.currentUserID +
+                "\n\nUser location: " + userLocation.toString() +
+                "\n\nNearest Parking: " + parkingFoundId;
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties,
+                new javax.mail.Authenticator(){
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(emergencySenderEmail, emergencySenderPassword);
+                    }
+                });
+        try{
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(emergencySenderEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emergencyRecipientEmail));
+            message.setSubject(subject);
+            message.setText(body);
+            Transport.send(message);
+            Toast.makeText(this, "Notification sent to admin", Toast.LENGTH_SHORT).show();
+        }catch(MessagingException e){
+            String errMsg = e.getMessage();
+            Toast.makeText(this, "Error in sending mail: "+errMsg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void endTheRide(){
+        ///*
+        MainActivity.rideTimer.cancel();
+        MainActivity.rideTimer.purge();
+        //*/
+                /*
+                MainActivity.handlerIfRunning = false;
+                MainActivity.timerHandler.removeCallbacks(MainActivity.rideTimerRunnable);
+                //MainActivity.timerHandler.removeCallbacks(MainActivity.timerRunnable);
+                MainActivity.rideTime = 0;
+                 */
+        //Can add to user history
+        Intent ridePaymentIntent = new Intent(RideActivity.this, RidePaymentActivity.class);
+        ridePaymentIntent.putExtra("cost", costTv.getText().toString());
+        startActivity(ridePaymentIntent);
     }
 
     private void makePhoneCall() {
@@ -214,6 +395,7 @@ public class RideActivity extends AppCompatActivity {
         super.onResume();
         isCarDetailsListening = true;
         isUserCarListening = true;
+        isParkingRefListening = true;
     }
 
     @Override
@@ -227,6 +409,10 @@ public class RideActivity extends AppCompatActivity {
         isUserCarListening = false;
         if(userCarValueEventListener != null)
             userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+
+        isParkingRefListening = false;
+        if(parkingRefValueEventListener != null && !parkingFoundId.equals(""))
+            parkingRef.child(parkingFoundId).child("l").removeEventListener(parkingRefValueEventListener);
     }
 
     @Override
@@ -240,5 +426,9 @@ public class RideActivity extends AppCompatActivity {
         isUserCarListening = false;
         if(userCarValueEventListener != null)
             userRef.child("Car booked").child(carId).removeEventListener(userCarValueEventListener);
+
+        isParkingRefListening = false;
+        if(parkingRefValueEventListener != null && !parkingFoundId.equals(""))
+            parkingRef.child(parkingFoundId).child("l").removeEventListener(parkingRefValueEventListener);
     }
 }

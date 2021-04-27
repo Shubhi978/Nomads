@@ -182,6 +182,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent addCarIntent = new Intent(MainActivity.this, AddCarsExtraMapActivity.class);
                 startActivity(addCarIntent);
                 break;
+            case R.id.nav_add_parkings_extra:
+                Toast.makeText(this, "AddParking activity", Toast.LENGTH_SHORT).show();
+                Intent addParkingIntent = new Intent(MainActivity.this, AddParkingsExtraMapsActivity.class);
+                startActivity(addParkingIntent);
+                break;
             case R.id.nav_logout:
                 //Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();

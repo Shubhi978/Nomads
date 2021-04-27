@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nomads">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -22,9 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nomads">
-        <activity android:name=".AboutUsActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".RidePaymentActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,6 +37,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".AddParkingsExtraMapsActivity"
+            android:label="@string/title_activity_add_parkings_extra_maps"></activity>
+        <activity
+            android:name=".AboutUsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".RidePaymentActivity" />
+        <activity
             android:name=".RideActivity"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -48,7 +54,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".UpdateProfileActivity"
-            android:parentActivityName=".ProfileActivity" />
+            android:parentActivityName=".ProfileActivity"/>
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".MainActivity" />

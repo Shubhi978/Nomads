@@ -64,6 +64,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     LocationManager locationManager;
     HashMap<Integer, Marker> hashMapMarker;
     HashMap<String, Marker> carsHashMapMarker;
+    HashMap<String, String> carsHashMapMarkerTitle;
     LatLng centralLocation;
     //GeoFire geoFire;
     private AppCompatButton useCurrentLocationButton;
@@ -177,6 +178,7 @@ public class MapsFragment extends Fragment implements LocationListener {
 
         hashMapMarker = new HashMap<>();
         carsHashMapMarker = new HashMap<>();
+        carsHashMapMarkerTitle = new HashMap<>();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -230,7 +232,14 @@ public class MapsFragment extends Fragment implements LocationListener {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             if (ds.exists()) {
                                 String currentCarID = ds.getKey();
-                                if (ds.hasChild("Location") && ds.child("Location").hasChild("latitude") && ds.child("Location").hasChild("longitude") && ds.hasChild("available")) {
+                                if (ds.hasChild("Details") && ds.child("Details").hasChild("car_modelName")
+                                        && ds.hasChild("Location") && ds.child("Location").hasChild("latitude")
+                                        && ds.child("Location").hasChild("longitude") && ds.hasChild("available")) {
+                                    //Store marker title in hashMap
+                                    String modelNo = ds.child("Details").child("car_modelName").getValue().toString();
+                                    carsHashMapMarkerTitle.put(currentCarID, modelNo);
+
+                                    //Add/Update the marker
                                     double latitude = ds.child("Location").child("latitude").getValue(Double.class);
                                     double longitude = ds.child("Location").child("longitude").getValue(Double.class);
                                     LatLng carLatLng = new LatLng(latitude, longitude);
@@ -245,7 +254,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                                     if (available.equals("true")) {
                                         carMarker = mMap.addMarker(new MarkerOptions()
                                                 .position(carLatLng)
-                                                .title("car model number")
+                                                .title(carsHashMapMarkerTitle.get(currentCarID))
                                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.green_car_marker)));
                                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
                                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
@@ -253,7 +262,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                                     } else {
                                         carMarker = mMap.addMarker(new MarkerOptions()
                                                 .position(carLatLng)
-                                                .title("car model number")
+                                                .title(carsHashMapMarkerTitle.get(currentCarID))
                                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.yellow_car_marker)));
                                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_directions_car_24)));
                                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));

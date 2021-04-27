@@ -211,10 +211,11 @@ public class CarActivity extends AppCompatActivity {
                 userRef.child("Car booked").child(MainActivity.currentRideCarID).child("ride_cost").setValue("00");
 
                 ///*
+                RideTimerTask.time = 0;
                 MainActivity.rideTimer = new Timer();
                 TimerTask task = new RideTimerTask();
                 //MainActivity.rideTimer.schedule(task, 60000, 60000);
-                //For demo: 1 sec = 1 min
+                //For demo: 5 sec = 1 min
                 MainActivity.rideTimer.schedule(task, 5000, 5000);
                  //*/
                 /*
