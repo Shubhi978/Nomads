@@ -46,7 +46,7 @@ public class RideMapsFragment extends Fragment{
     LocationListener locationListener;
     
     AppCompatButton searchParkingBttn;
-    Marker parkingMarker;
+    Marker parkingMarker, carMarker;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -81,13 +81,16 @@ public class RideMapsFragment extends Fragment{
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+                    /*
                     Toast.makeText(getContext(), "User Location Changed!", Toast.LENGTH_SHORT).show();
                     mMap.clear();
-                    LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng));
+                    LatLng carLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(carLatLng).title("Your Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(carLatLng));
 
                     RideActivity.userLocation = location;
+
+                     */
                 }
 
                 @Override
@@ -108,13 +111,6 @@ public class RideMapsFragment extends Fragment{
             //*/
             if (Build.VERSION.SDK_INT < 23) {
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
                 locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -125,12 +121,13 @@ public class RideMapsFragment extends Fragment{
                     ///*
                     locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
                     Location lastKnownLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-                    mMap.clear();
+                    if(carMarker != null)
+                        carMarker.remove();
                     LatLng userLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
+                    carMarker = mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 17));
 
-                    RideActivity.userLocation = lastKnownLocation;
+                    RideActivity.carLocation = lastKnownLocation;
 
                      //*/
                 }
@@ -167,13 +164,42 @@ public class RideMapsFragment extends Fragment{
                 getClosestParking();
             }
         });
+
+        RideActivity.carLocationRef = FirebaseDatabase.getInstance().getReference().child("Cars").child(MainActivity.currentRideCarID).child("Location");
+        RideActivity.carLocationRef.addValueEventListener(RideActivity.carLocationValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(RideActivity.isCarLocationRefListening){
+                    if(snapshot.exists() && snapshot.child("latitude").exists() && snapshot.child("longitude").exists()){
+                        double lat = Double.parseDouble(snapshot.child("latitude").getValue().toString());
+                        double lon = Double.parseDouble(snapshot.child("longitude").getValue().toString());
+
+                        RideActivity.carLocation.setLatitude(lat);
+                        RideActivity.carLocation.setLongitude(lon);
+
+                        if(carMarker != null)
+                            carMarker.remove();
+                        LatLng carLatLng = new LatLng(lat, lon);
+                        carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).title("Your Location"));
+
+                        if(!RideActivity.isParkingFound)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(carLatLng));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void getClosestParking() {
         RideActivity.parkingRef = FirebaseDatabase.getInstance().getReference().child("ParkingLots");
 
         GeoFire geoFire = new GeoFire(RideActivity.parkingRef);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(RideActivity.userLocation.getLatitude(), RideActivity.userLocation.getLongitude()), RideActivity.searchRadius);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(RideActivity.carLocation.getLatitude(), RideActivity.carLocation.getLongitude()), RideActivity.searchRadius);
 
         geoQuery.removeAllListeners();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {

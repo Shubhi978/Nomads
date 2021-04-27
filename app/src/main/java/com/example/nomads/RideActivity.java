@@ -54,7 +54,7 @@ public class RideActivity extends AppCompatActivity {
     AppCompatButton contactUsBttn, endRideBttn;
     Button dialogCancelBttn, dialogEmergencyEndBttn;
 
-    DatabaseReference carRef;
+    static DatabaseReference carRef;
 
     FirebaseAuth mAuth;
     DatabaseReference userRef;
@@ -74,8 +74,8 @@ public class RideActivity extends AppCompatActivity {
 
     Dialog endConfirmationDialog;
 
-    static DatabaseReference parkingRef;
-    static Location userLocation;
+    static DatabaseReference parkingRef, carLocationRef;
+    static Location carLocation;
     static String parkingFoundId = "";
     static int searchRadius = 1;
     static boolean isParkingFound = false;
@@ -83,8 +83,8 @@ public class RideActivity extends AppCompatActivity {
     static GeoQueryEventListener geoQueryEventListener;
     static boolean isGeoQueryListening = true;
 
-    static ValueEventListener parkingRefValueEventListener;
-    static boolean isParkingRefListening = true;
+    static ValueEventListener parkingRefValueEventListener, carLocationValueEventListener;
+    static boolean isParkingRefListening = true, isCarLocationRefListening = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,7 +230,7 @@ public class RideActivity extends AppCompatActivity {
         parkingRef = FirebaseDatabase.getInstance().getReference().child("ParkingLots");
 
         GeoFire geoFire = new GeoFire(RideActivity.parkingRef);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(userLocation.getLatitude(), userLocation.getLongitude()), searchRadius);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(carLocation.getLatitude(), carLocation.getLongitude()), searchRadius);
 
         geoQuery.removeAllListeners();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -238,20 +238,20 @@ public class RideActivity extends AppCompatActivity {
             public void onKeyEntered(String key, GeoLocation location) {
                 if(!isParkingFound){
                     isParkingFound = true;
-                    RideActivity.parkingFoundId = key;
+                    parkingFoundId = key;
 
                     Location parkingLocation = new Location("");
                     parkingLocation.setLatitude(location.latitude);
                     parkingLocation.setLongitude(location.longitude);
 
-                    double distance = userLocation.distanceTo(parkingLocation);
-                    //Toast.makeText(RideActivity.this, "distance found: "+distance, Toast.LENGTH_SHORT).show();
+                    double distance = carLocation.distanceTo(parkingLocation);
+                    Toast.makeText(RideActivity.this, "distance found: "+distance + "m", Toast.LENGTH_SHORT).show();
 
-                    //if(distance < 1){
+                    if(distance < 10){
                         endTheRide();
-                    //}else{
-                      //  displayConfirmationDialog();
-                    //}
+                    }else{
+                        displayConfirmationDialog();
+                    }
 
                 }
             }
@@ -269,7 +269,7 @@ public class RideActivity extends AppCompatActivity {
             @Override
             public void onGeoQueryReady() {
                 if(!isParkingFound){
-                    //Toast.makeText(RideActivity.this, "Parking lot not found in 1 query!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RideActivity.this, "Parking lot not found in 1 query (1 Km)!", Toast.LENGTH_SHORT).show();
 
                     displayConfirmationDialog();
                 }
@@ -321,7 +321,7 @@ public class RideActivity extends AppCompatActivity {
         String subject = "Nomads ## EMERGENCY END #" + rno + " ## - Unsafe parking by user";
         String body = "Time: " + currentDateandTime +
                 "\n\nUser: " + MainActivity.currentUserID +
-                "\n\nUser location: " + userLocation.toString() +
+                "\n\nUser location: " + carLocation.toString() +
                 "\n\nNearest Parking: " + parkingFoundId;
 
         Properties properties = new Properties();
@@ -396,6 +396,7 @@ public class RideActivity extends AppCompatActivity {
         isCarDetailsListening = true;
         isUserCarListening = true;
         isParkingRefListening = true;
+        isCarLocationRefListening = true;
     }
 
     @Override
@@ -413,6 +414,10 @@ public class RideActivity extends AppCompatActivity {
         isParkingRefListening = false;
         if(parkingRefValueEventListener != null && !parkingFoundId.equals(""))
             parkingRef.child(parkingFoundId).child("l").removeEventListener(parkingRefValueEventListener);
+
+        isCarLocationRefListening = false;
+        if(carLocationValueEventListener != null)
+            carLocationRef.removeEventListener(carLocationValueEventListener);
     }
 
     @Override
@@ -430,5 +435,9 @@ public class RideActivity extends AppCompatActivity {
         isParkingRefListening = false;
         if(parkingRefValueEventListener != null && !parkingFoundId.equals(""))
             parkingRef.child(parkingFoundId).child("l").removeEventListener(parkingRefValueEventListener);
+
+        isCarLocationRefListening = false;
+        if(carLocationValueEventListener != null)
+            carLocationRef.removeEventListener(carLocationValueEventListener);
     }
 }
