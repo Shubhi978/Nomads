@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/about_us_phone_2"
                 android:drawableLeft="@drawable/ic_baseline_phone_android_24"
-                android:text="  7985923391"
+                android:text="  7037777342"
                 android:textSize="17sp"
                 android:textColor="#7FCCFF"
                 android:paddingHorizontal="10dp"

@@ -142,23 +142,25 @@ public class AddCarsExtraMapActivity extends AppCompatActivity implements OnMapR
         if(TextUtils.isEmpty(carID)){
             Toast.makeText(this, "UNIQUE Custom car id needed!", Toast.LENGTH_SHORT).show();
         }else{
-            DatabaseReference carRef = FirebaseDatabase.getInstance().getReference().child("Cars").child(carID);
-            /*
-            //GeoFire geoFire = new GeoFire(carRef.child("location"));
+            DatabaseReference carRef = FirebaseDatabase.getInstance().getReference().child("Cars");
+
             GeoFire geoFire = new GeoFire(carRef);
-            geoFire.setLocation("location", new GeoLocation(latLng.latitude , latLng.longitude));
-             */
+            geoFire.setLocation(carID, new GeoLocation(latLng.latitude, latLng.longitude));
+
+            /*
             //Alternative location in Firebase
             carRef.child("Location").child("latitude").setValue(latLng.latitude);
             carRef.child("Location").child("longitude").setValue(latLng.longitude);
 
-            carRef.child("available").setValue("true");
-            carRef.child("Details").child("car_modelName").setValue("Model name");
-            carRef.child("Details").child("car_plateNo").setValue("Vehicle Identification Number");
-            carRef.child("Details").child("car_modelNo").setValue("model no");
-            carRef.child("Details").child("car_mileage").setValue("mileage");
-            carRef.child("Details").child("car_rating").setValue("0.0");
-            carRef.child("Details").child("car_ratingCount").setValue("0");
+             */
+
+            carRef.child(carID).child("available").setValue("true");
+            carRef.child(carID).child("Details").child("car_modelName").setValue("Model name");
+            carRef.child(carID).child("Details").child("car_plateNo").setValue("Vehicle Identification Number");
+            carRef.child(carID).child("Details").child("car_modelNo").setValue("model no");
+            carRef.child(carID).child("Details").child("car_mileage").setValue("mileage");
+            carRef.child(carID).child("Details").child("car_rating").setValue("0.0");
+            carRef.child(carID).child("Details").child("car_ratingCount").setValue("0");
             //Other details
         }
 

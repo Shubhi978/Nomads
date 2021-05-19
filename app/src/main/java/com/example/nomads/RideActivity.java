@@ -66,7 +66,7 @@ public class RideActivity extends AppCompatActivity {
     boolean isCarDetailsListening = true, isUserCarListening = true;
 
     private static final int REQUEST_CALL = 1;
-    String emergencyNo = "7985923391";      //7985923391  9451179809
+    String emergencyNo = "7037777342";      //7985923391  9451179809
     String emergencyRecipientEmail = "jyotsana.srivastava99@gmail.com,iit2019171@iiita.ac.in,iit2019163@iiita.ac.in,iit2019175@iiita.ac.in";
     //String emergencyRecipientEmail = "jyotsana.srivastava99@gmail.com";
     String emergencySenderEmail = "iit2019174@iiita.ac.in";
@@ -80,11 +80,13 @@ public class RideActivity extends AppCompatActivity {
     static int searchRadius = 1;
     static boolean isParkingFound = false;
 
-    static GeoQueryEventListener geoQueryEventListener;
+    //static GeoQueryEventListener geoQueryEventListener;
     static boolean isGeoQueryListening = true;
 
     static ValueEventListener parkingRefValueEventListener, carLocationValueEventListener;
     static boolean isParkingRefListening = true, isCarLocationRefListening = true;
+
+    public static boolean ridesIsFromSetting=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +225,7 @@ public class RideActivity extends AppCompatActivity {
     private void checkIfParkingSafely() {
         searchRadius = 1;
         isParkingFound = false;
+        isGeoQueryListening = true;
         getClosestParking();
     }
 
@@ -236,7 +239,7 @@ public class RideActivity extends AppCompatActivity {
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                if(!isParkingFound){
+                if(isGeoQueryListening && !isParkingFound){
                     isParkingFound = true;
                     parkingFoundId = key;
 
@@ -268,7 +271,7 @@ public class RideActivity extends AppCompatActivity {
 
             @Override
             public void onGeoQueryReady() {
-                if(!isParkingFound){
+                if(isGeoQueryListening && !isParkingFound){
                     Toast.makeText(RideActivity.this, "Parking lot not found in 1 query (1 Km)!", Toast.LENGTH_SHORT).show();
 
                     displayConfirmationDialog();
@@ -346,16 +349,20 @@ public class RideActivity extends AppCompatActivity {
             Transport.send(message);
             Toast.makeText(this, "Notification sent to admin", Toast.LENGTH_SHORT).show();
         }catch(MessagingException e){
-            String errMsg = e.getMessage();
-            Toast.makeText(this, "Error in sending mail: "+errMsg, Toast.LENGTH_SHORT).show();
+            //String errMsg = e.getMessage();
+            //Toast.makeText(this, "Error in sending mail: "+errMsg, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void endTheRide(){
         ///*
-        MainActivity.rideTimer.cancel();
-        MainActivity.rideTimer.purge();
+        if(MainActivity.rideTimer != null) {
+            MainActivity.rideTimer.cancel();
+            MainActivity.rideTimer.purge();
+        }
         //*/
+        //MainActivity.isRidePaymentPending = true;
+        userRef.child("Car booked").child(carId).child("status").setValue("payment_pending");
                 /*
                 MainActivity.handlerIfRunning = false;
                 MainActivity.timerHandler.removeCallbacks(MainActivity.rideTimerRunnable);
@@ -364,8 +371,9 @@ public class RideActivity extends AppCompatActivity {
                  */
         //Can add to user history
         Intent ridePaymentIntent = new Intent(RideActivity.this, RidePaymentActivity.class);
-        ridePaymentIntent.putExtra("cost", costTv.getText().toString());
+        //ridePaymentIntent.putExtra("cost", costTv.getText().toString());
         startActivity(ridePaymentIntent);
+        finish();
     }
 
     private void makePhoneCall() {
@@ -391,12 +399,29 @@ public class RideActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (ridesIsFromSetting){
+            finish();
+            startActivity(getIntent());
+            ridesIsFromSetting=false;
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         isCarDetailsListening = true;
         isUserCarListening = true;
         isParkingRefListening = true;
         isCarLocationRefListening = true;
+        isGeoQueryListening = true;
+
+        if (ridesIsFromSetting){
+            finish();
+            startActivity(getIntent());
+            ridesIsFromSetting=false;
+        }
     }
 
     @Override
@@ -418,6 +443,8 @@ public class RideActivity extends AppCompatActivity {
         isCarLocationRefListening = false;
         if(carLocationValueEventListener != null)
             carLocationRef.removeEventListener(carLocationValueEventListener);
+
+        isGeoQueryListening = false;
     }
 
     @Override
@@ -439,5 +466,7 @@ public class RideActivity extends AppCompatActivity {
         isCarLocationRefListening = false;
         if(carLocationValueEventListener != null)
             carLocationRef.removeEventListener(carLocationValueEventListener);
+
+        isGeoQueryListening = false;
     }
 }

@@ -95,7 +95,6 @@ public class RateActivity extends AppCompatActivity {
 
                     }
 
-                    Toast.makeText(RateActivity.this, "Thank you!", Toast.LENGTH_SHORT).show();
                     rebuildAndGoToMainScreen();
                 }
             }
@@ -103,9 +102,16 @@ public class RateActivity extends AppCompatActivity {
     }
 
     private void rebuildAndGoToMainScreen() {
+        Toast.makeText(RateActivity.this, "Thank you!", Toast.LENGTH_SHORT).show();
         Intent mainIntent = new Intent(RateActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        rebuildAndGoToMainScreen();
     }
 }

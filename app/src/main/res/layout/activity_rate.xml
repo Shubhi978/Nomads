@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/rate_heading"
         android:text="Thank you for Riding with us!\n\nDo Rate your Ride  :)"
+        android:textColor="@color/colorBlack"
         android:textSize="23sp"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
@@ -32,12 +33,15 @@
         android:layout_below="@+id/rate_heading"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:elevation="10dp"
         android:numStars="5"
         android:stepSize="1"
         android:progressTint="#FFC107"
+        android:progressBackgroundTint="@color/colorPrimaryShadow"
         android:rating="0"
         style="@style/Widget.AppCompat.RatingBar.Indicator"
-        android:isIndicator="false">
+        android:isIndicator="false"
+        android:theme="@style/Widget.AppCompat.RatingBar">
     </RatingBar>
 
     <EditText
@@ -46,6 +50,9 @@
         android:id="@+id/rate_feedback_edittext"
         android:layout_below="@+id/rate_rating_bar"
         android:hint="Your Feedback is valuable to us... (Optional)"
+        android:textColorHint="@color/colorSecondaryText"
+        android:ellipsize="start"
+        android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="15dp"
         android:background="@drawable/inputs"

@@ -33,7 +33,7 @@ public class AboutUsActivity extends AppCompatActivity {
     TextView email_1_tv, phone_1_tv, phone_2_tv;
 
     private static final int REQUEST_CALL = 1;
-    String phone1 = "8303064565", phone2 = "7985923391", email1 = "iit2019163@iiita.ac.in";
+    String phone1 = "8303064565", phone2 = "7037777342", email1 = "iit2019175@iiita.ac.in";
     String contact = "";
     int feedbackNo = 0;
 

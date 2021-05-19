@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MapsFragment">
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
     <androidx.appcompat.widget.SearchView
+        android:id="@+id/map_fragment_search_bar"
+        style="@style/Widget.AppCompat.Light.SearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/map_fragment_search_bar"
-        app:queryHint="Search"
-        app:iconifiedByDefault="false"
-        android:layout_margin="10dp"
-        android:elevation="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/search_bg"
-        android:layout_alignParentTop="true">
-    </androidx.appcompat.widget.SearchView>
+        android:elevation="10dp"
+        android:ellipsize="start"
+        android:padding="8dp"
+        android:textAlignment="viewStart"
+        android:textDirection="ltr"
+        android:visibility="visible"
+        app:closeIcon="@drawable/ic_baseline_close_24"
+        app:commitIcon="@drawable/ic_baseline_search_24"
+        app:goIcon="@drawable/ic_baseline_search_24"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@color/white"
+        app:queryHint="Search location"
+        app:searchHintIcon="@drawable/ic_baseline_search_24"
+        app:searchIcon="@drawable/ic_baseline_search_24"
+        tools:visibility="visible"></androidx.appcompat.widget.SearchView>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/map_fragment_use_current_location_button"
@@ -34,7 +48,7 @@
         android:layout_marginHorizontal="10dp"
         android:background="@drawable/button"
         android:text="Use current Location"
-        android:textColor="@color/white">
-    </androidx.appcompat.widget.AppCompatButton>
+        android:textColor="@color/white"
+        android:textSize="16sp"></androidx.appcompat.widget.AppCompatButton>
 
 </RelativeLayout>

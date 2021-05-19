@@ -178,6 +178,8 @@ public class RidePaymentActivity extends AppCompatActivity implements PaymentRes
         userRef.child("Car booked").child(MainActivity.currentRideCarID).removeValue();
         Toast.makeText(RidePaymentActivity.this, "Payment Sucessful! Ride ended successfully.", Toast.LENGTH_SHORT).show();
 
+        //MainActivity.isRidePaymentPending = false;
+
         Intent rateIntent = new Intent(RidePaymentActivity.this, RateActivity.class);
         startActivity(rateIntent);
         finish();

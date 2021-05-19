@@ -247,6 +247,12 @@ public class CarActivity extends AppCompatActivity {
         finish();
     }
 
+    private void sendUserToRidePaymentActivity(){
+        Intent paymentIntent = new Intent(CarActivity.this, RidePaymentActivity.class);
+        startActivity(paymentIntent);
+        finish();
+    }
+
      //*/
     private void killActivity(){
         //Toast.makeText(this, "killActivity() called", Toast.LENGTH_SHORT).show();
@@ -279,6 +285,9 @@ public class CarActivity extends AppCompatActivity {
                             //Toast.makeText(CarActivity.this, "Should go to RideActivity", Toast.LENGTH_SHORT).show();
                             //userRef.child("Car booked").child(carId).removeEventListener(this);
                             killActivity();
+                        }else if(snapshot.child("status").exists() && snapshot.child("status").getValue().toString().equals("payment_pending")){
+                            sendUserToRidePaymentActivity();
+                            killActivity();
                         }
                         if (snapshot.child("waiting time").exists()) {
                             String str = snapshot.child("waiting time").getValue().toString();
@@ -303,6 +312,8 @@ public class CarActivity extends AppCompatActivity {
         cancelBookingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(CarActivity.this, "Booking cancelled", Toast.LENGTH_SHORT).show();
+                if(MainActivity.countDownTimer != null)
                 MainActivity.countDownTimer.cancel();
                 //MainActivity.countDownTimer.onFinish();
                 carRef.child("available").setValue("true");
@@ -327,6 +338,7 @@ public class CarActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                Toast.makeText(CarActivity.this, "Unable to reach the car in time. Booking cancelled!", Toast.LENGTH_SHORT).show();
                 carRef.child("available").setValue("true");
                 userRef.child("Car booked").child(carId).removeValue();
                 waitingTv.setVisibility(View.INVISIBLE);

@@ -65,9 +65,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements DatePick
         mToolbar = (Toolbar)findViewById(R.id.update_profile_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Update Profile");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fullnameTv = (EditText)findViewById(R.id.update_profile_fullname_display);
         dobTv = (TextView) findViewById(R.id.update_profile_dob_display);
@@ -117,7 +117,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements DatePick
                         dlIssueDateTv.setText(dlIssueDate);
                         dlValidTillTv.setText(dlValidTill);
                     } else {
-                        Toast.makeText(UpdateProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateProfileActivity.this, "Unable to connect with the database.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -265,8 +265,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void sendUserToProfileActivity() {
-        Intent profileIntent = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
-        startActivity(profileIntent);
+        //Intent profileIntent = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
+        //startActivity(profileIntent);
+        ProfileActivity.backAfterUpdatingProfile = true;
         finish();
     }
 

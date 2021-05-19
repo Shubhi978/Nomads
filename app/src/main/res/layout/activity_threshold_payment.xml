@@ -21,6 +21,7 @@
         android:layout_below="@+id/threshold_payment_toolbar"
         android:layout_marginTop="40dp"
         android:textSize="18sp"
+        android:textColor="@color/black"
         android:padding="10dp"></TextView>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -58,6 +59,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/threshold_payment_text_view_2"
         android:text="------  Demo Payment  ------"
+        android:textColor="@color/black"
         android:layout_below="@+id/threshold_payment_upi_button"
         android:layout_marginTop="70dp"
         android:layout_centerHorizontal="true"

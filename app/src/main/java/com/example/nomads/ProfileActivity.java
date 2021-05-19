@@ -35,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     String currentUserID;
     private ValueEventListener profileUserRefValueEventListener;
     Boolean isProfileUserRefListening = true;
+    static boolean backAfterUpdatingProfile = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,18 @@ public class ProfileActivity extends AppCompatActivity {
         dlValidTillTv = (TextView)findViewById(R.id.profile_dl_valid_till);
         editProfileButton = (AppCompatButton) findViewById(R.id.profile_edit_button);
 
+        displayDetails();
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent updateProfileIntent = new Intent(ProfileActivity.this, UpdateProfileActivity.class);
+                startActivity(updateProfileIntent);
+            }
+        });
+    }
+
+    private void displayDetails() {
         profileUserRef.addValueEventListener(profileUserRefValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
                         dlIssueDateTv.setText(dlIssueDate);
                         dlValidTillTv.setText(dlValidTill);
                     } else {
-                        Toast.makeText(ProfileActivity.this, "Snapshot doesn't exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Unable to connect with the database.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -104,14 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent updateProfileIntent = new Intent(ProfileActivity.this, UpdateProfileActivity.class);
-                startActivity(updateProfileIntent);
-            }
-        });
     }
 
     @Override
@@ -119,6 +124,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
         //Toast.makeText(this, "onResume() of Profile", Toast.LENGTH_SHORT).show();
         isProfileUserRefListening = true;
+
+        if(backAfterUpdatingProfile)
+            displayDetails();
     }
 
     @Override
@@ -134,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //Toast.makeText(this, "onDestroy() of Profile", Toast.LENGTH_SHORT).show();
+        backAfterUpdatingProfile = false;
         isProfileUserRefListening = false;
         if(profileUserRefValueEventListener != null)
             profileUserRef.removeEventListener(profileUserRefValueEventListener);
